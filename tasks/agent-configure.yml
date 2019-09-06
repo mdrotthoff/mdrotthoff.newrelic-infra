@@ -1,0 +1,36 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+# Configure the Newrelic infrastructure agent
+- name: Setup agent configuration
+  template:
+    src:  newrelic-infra.yml.j2
+    dest: /etc/newrelic-infra.yml
+    mode: 0600
+  notify: Restart newrelic-infra
+
+- name: Ensure the target log file directory exists
+  file:
+    path: "{{ newrelic_log_dir }}"
+    state: directory
+  when:
+  - newrelic_log_dir is defined
+  - nrinfragent_config is defined
+  - nrinfragent_config.log_file is defined
+
+- name: Setup the agent service
+  service:
+    name: newrelic-infra
+    state: "{{ newrelic_service_state | default('started') }}"
+    enabled: "{{ newrelic_service_enabled | default(true) }}"
+
+- name: Configure logrotate for the files
+  template:
+    src: logrotate.d.j2
+    dest: "{{ logrotate_conf_dir }}{{ item.name }}"
+  with_items: "{{ newrelic_logrotate.logrotate_scripts }}"
+  when:
+  - newrelic_logrotate is defined
+  - newrelic_logrotate.logrotate_scripts is defined

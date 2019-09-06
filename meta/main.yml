@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: David Rotthoff
+  description: Role to install New Relic Infrastructure agent
+  company: Cox Automotive, LLC
+  license: 
+  min_ansible_version: 2.1
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+  categories:
+    - cloud:ec2
+    - monitoring
+    - system

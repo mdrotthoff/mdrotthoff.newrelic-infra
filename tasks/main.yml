@@ -1,0 +1,38 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+- name: Display New Relic configuration to be applied
+  debug:
+    var: nrinfragent_config
+    verbosity: 2
+
+- name: Confirm RedHat lsb util is present
+  yum:
+    name: redhat-lsb-core
+    state: present
+  register: yum_redhat_lsb_result
+
+- name: Display the lsb status
+  debug:
+    var: yum_redhat_lsb_result
+    verbosity: 2
+
+- name: Re-read ansible_lsb facts if the LSB package was installed
+  setup:
+    filter: ansible_lsb*
+  when: yum_redhat_lsb_result == 'Changed'
+
+- name: Execute set up on a RedHat based system from local sources
+  include_tasks: install-local.yml
+  when:
+  - newrelic_external_install != true
+
+- name: Execute set up on a RedHat based system from external sources
+  include_tasks: install-external.yml
+  when:
+  - newrelic_external_install == true
+
+- name: Configure the agent for use
+  include_tasks: agent-configure.yml

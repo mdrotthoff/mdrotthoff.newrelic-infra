@@ -1,0 +1,24 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+# handlers file for newrelic-infra
+# Clean the yum metadata cache
+- name: yum-clean-metadata
+  listen: yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+
+- name: Stop newrelic-infra service
+  listen: Restart newrelic-infra
+  service:
+    name: newrelic-infra
+    state: stopped
+
+- name: Set newrelic-infra service to the desired state
+  listen: Restart newrelic-infra
+  service:
+    name: newrelic-infra
+    state: "{{ newrelic_service_state | default('started') }}"

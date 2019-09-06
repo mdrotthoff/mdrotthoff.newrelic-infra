@@ -1,0 +1,77 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+# Set up the Newrelic Infrastructure agent on a Redhat server from local files
+- name: Copy newrelic-infra gpg key to the host
+  copy:
+    src: "{{ newrelic_infra_agent_source }}/el{{ ansible_distribution_major_version }}/newrelic-infra.gpg"
+    dest: "/tmp/newrelic-infra.gpg"
+    owner: root
+    group: root
+    mode: '0600'
+  check_mode: false
+  changed_when: false
+
+- name: Remove agent repo keys if they exist
+  rpm_key:
+    key: /tmp/newrelic-infra.gpg
+    state: absent
+  ignore_errors: true
+  notify: yum-clean-metadata
+
+- name: Remove the temporary newrelic-infra gpg key
+  file:
+    name: /tmp/newrelic-infra.gpg
+    state: absent
+  check_mode: false
+  changed_when: false
+
+- name: Remove agent repo reference
+  yum_repository:
+    name: 'newrelic-infra'
+    state: absent
+  notify: yum-clean-metadata
+
+- name: Clear the list of the newrelic-infra agent packages required
+  set_fact:
+    newrelic_infra_sources: "[]"
+
+- name: Create a list of the newrelic-infra agent packages required
+  set_fact:
+    newrelic_infra_sources: "{{ newrelic_infra_sources | default([]) }} + [ '{{ item.name }}-{{ item.version }}-{{ item.release }}.{{ ansible_architecture }}.rpm' ]"
+  with_items:  "{{ newrelic_infra_packages }}"
+
+- name: Display the newrelic-infra agent packages to be installed
+  debug:
+    var: newrelic_infra_sources
+    verbosity: 2
+
+- name: Copy newrelic-infra agent packages to the host
+  copy:
+    src: "{{ newrelic_infra_agent_source }}/el{{ ansible_distribution_major_version }}/{{ item }}"
+    dest: "/tmp/{{ item }}"
+    owner: root
+    group: root
+    mode: '0600'
+  with_items: "{{ newrelic_infra_sources }}"
+  check_mode: false
+  changed_when: false
+
+- name: Install the newrelic-infra agent packages.
+  package:
+    name: "/tmp/{{ item }}"
+    state: present
+  with_items: "{{ newrelic_infra_sources }}"
+  register: newrelic_install
+  notify: Restart newrelic-infra
+
+- name: Remove the temporary newrelic-infra packages used for the install
+  file:
+    name: "/tmp/{{ item }}"
+    state: absent
+  with_items: "{{ newrelic_infra_sources }}"
+  changed_when: "newrelic_install.changed"
+  check_mode: false
+

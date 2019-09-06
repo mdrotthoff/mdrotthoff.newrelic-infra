@@ -1,0 +1,33 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+# De-configure the Newrelic infrastructure agent
+- name: Stop and disable the agent service
+  service:
+    name: newrelic-infra
+    state: stopped
+    enabled: false
+  ignore_errors: true
+
+- name: Remove agent configuration
+  file:
+    path: /etc/newrelic-infra.yml
+    state: absent
+
+- name: Deconfigure logrotate for the files
+  file:
+    path: "{{ logrotate_conf_dir }}{{ item.name }}"
+    state: absent
+  with_items: "{{ newrelic_logrotate.logrotate_scripts }}"
+  when:
+  - newrelic_logrotate is defined
+  - newrelic_logrotate.logrotate_scripts is defined
+
+- name: Remove the target log file directory
+  file:
+    path: "{{ newrelic_log_dir }}"
+    state: absent
+  when:
+  - newrelic_log_dir is defined
