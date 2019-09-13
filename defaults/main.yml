@@ -1,11 +1,15 @@
 ---
-nrinfragent_state: "latest"
-#nrinfragent_state: "absent"
-nrinfragent_version: "*"
-nrinfragent_config:
-  license_key: YOUR_LICENSE_KEY
-logrotate_conf_dir: "/etc/logrotate.d/"
-logrotate_scripts: []
+newrelic_infra_state: "latest"
+#newrelic_infra_state: "absent"
+newrelic_infra_version: "*"
+newrelic_infra_license_key: YOUR_LICENSE_KEY
+
+newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64
+newrelic_infra_repo_gpgkey: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
+newrelic_infra_repo_gpgcheck: True
+newrelic_infra_repo_repo_gpgcheck: True
+
+
 
 newrelic_external_install: true
 newrelic_service_enabled: true
