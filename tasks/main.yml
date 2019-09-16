@@ -22,6 +22,8 @@
   package:
     name: "{{ newrelic_infra_package }}"
     state: "{{ newrelic_infra_state }}"
+  notify:
+    - Restart New Relic Agent
 
 - name: Setup New Relic Infrastructure Agent Config file
   template:
@@ -29,3 +31,4 @@
     dest: "{{ newrelic_infra_config_file }}"
   notify:
     - Restart New Relic Agent
+

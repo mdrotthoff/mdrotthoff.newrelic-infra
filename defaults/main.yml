@@ -3,7 +3,7 @@ newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 
 
 newrelic_infra_config_file: /etc/newrelic-infra.yml
-#newrelic_infra_config_display_name: {}
+newrelic_infra_config_display_name: "{{ display_name | default('Unknown') }}"
 newrelic_infra_config_event_queue_depth: 5000
 newrelic_infra_config_log_file: /var/log/newrelic-infra/nr-infra.log
 newrelic_infra_config_log_to_stdout: False
@@ -12,17 +12,20 @@ newrelic_infra_config_net_iface_filter:
   - lo
   - em
 newrelic_infra_custom_config:
-  - name: application
+  - key: application
     value: New Relic Plugins
-  - name: data_center
+  - key: data_center
     value: Laptop VM
-  - name: environment
+  - key: environment
     value: Individual
-  - name: machine_type
+  - key: machine_type
     value: Virtual Machine
-  - name: team
+  - key: team
     value: David Rotthoff
-
+  - key: friendly_name
+    value: "{{ friendly_name | default('Unknown') }}"
+  - key: physical_name
+    value: "{{ physical_name | default('Unknown') }}"
 
 newrelic_infra_state: present
 #newrelic_infra_state: absent
