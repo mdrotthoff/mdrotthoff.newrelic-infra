@@ -1,45 +1,35 @@
 {# For backward compatibility, the license key will be written if it is defined #}
 {% if newrelic_infra_config_license_key is defined %}
 license_key: {{ newrelic_infra_config_license_key }}
-{% endif %}
+{% endif -%}
 
-{% if newrelic_infra_config_display_name is defined %}
+{%- if newrelic_infra_config_display_name is defined %}
 display_name: {{ newrelic_infra_config_display_name }}
-{% endif %}
+{% endif -%}
 
-{% if newrelic_infra_config_event_queue_depth is defined %}
+{%- if newrelic_infra_config_event_queue_depth is defined %}
 event_queue_depth: {{ newrelic_infra_config_event_queue_depth }}
-{% endif %}
+{% endif -%}
 
-{% if newrelic_infra_config_log_file is defined %}
+{%- if newrelic_infra_config_log_file is defined %}
 log_file: {{ newrelic_infra_config_log_file }}
-{% endif %}
+{% endif -%}
 
-{% if newrelic_infra_config_log_to_stdout is defined %}
+{%- if newrelic_infra_config_log_to_stdout is defined -%}
 log_to_stdout: {{ newrelic_infra_config_log_to_stdout }}
-{% endif %}
+{% endif -%}
 
-{% if newrelic_infra_config_net_iface_filter is defined %}
+{%- if newrelic_infra_config_net_iface_filter is defined %}
 network_interface_filters:
   prefix:
 {% for iface in newrelic_infra_config_net_iface_filter %}
     - {{ iface }}
 {% endfor %}
-{% endif %}
+{% endif -%}
 
+{% if newrelic_infra_custom_config is defined %}
 custom_attributes:
+{% for key, value in newrelic_infra_custom_config %}
 {% if newrelic_infra_config_application is defined %}
-  application: {{ newrelic_infra_config_application }}
-{% endif %}
-{% if newrelic_infra_config_data_center is defined %}
-  data_center: {{ newrelic_infra_config_data_center }}
-{% endif %}
-{% if newrelic_infra_config_environment is defined %}
-  environment: {{ newrelic_infra_config_environment }}
-{% endif %}
-{% if newrelic_infra_config_machine_type is defined %}
-  machine_type: {{ newrelic_infra_config_machine_type }}
-{% endif %}
-{% if newrelic_infra_config_team is defined %}
-  team: {{ newrelic_infra_config_team }}
-{% endif %}
+  {{ key }}: {{ value }}
+{% endfor %}
