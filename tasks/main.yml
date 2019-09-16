@@ -52,3 +52,10 @@
   rpm_key:
     key: "{{ newrelic_infra_repo_gpgkey }}"
     state: present
+
+- name: Install the New Relic Infrastructure Agent package.
+  package:
+    name: "{{ newrelic_infra_package }}"
+    state: "{{ newrelic_infra_state }}"
+    version: "{{ newrelic_infra_version | default(omit) }}"
+  notify: Restart New Relic Agent
