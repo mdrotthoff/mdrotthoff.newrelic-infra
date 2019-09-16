@@ -10,11 +10,11 @@ newrelic_infra_config_net_iface_filter:
   - p
   - lo
   - em
-#newrelic_infra_config_application: {}
-#newrelic_infra_config_data_center: {}
-#newrelic_infra_config_environment: {}
-#newrelic_infra_config_machine_type: {}
-#newrelic_infra_config_team: {}
+newrelic_infra_config_application: New Relic Plugins
+newrelic_infra_config_data_center: Laptop VM
+newrelic_infra_config_environment: Individual
+newrelic_infra_config_machine_type: Virtual Machine
+newrelic_infra_config_team: David Rotthoff
 newrelic_infra_config_file: /etc/newrelic-infra.yml
 
 
