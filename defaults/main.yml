@@ -3,7 +3,6 @@ newrelic_infra_license_key: YOUR_LICENSE_KEY
 
 newrelic_infra_state: present
 #newrelic_infra_state: absent
-#newrelic_infra_version: "*"
 newrelic_infra_package: newrelic-infra
 
 newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64

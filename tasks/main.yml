@@ -57,5 +57,4 @@
   package:
     name: "{{ newrelic_infra_package }}"
     state: "{{ newrelic_infra_state }}"
-    version: "{{ newrelic_infra_version | default(omit) }}"
   notify: Restart New Relic Agent
