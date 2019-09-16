@@ -30,6 +30,6 @@ network_interface_filters:
 {% if newrelic_infra_custom_config is defined %}
 custom_attributes:
 {% for key, value in newrelic_infra_custom_config %}
-{% if newrelic_infra_config_application is defined %}
   {{ key }}: {{ value }}
 {% endfor %}
+{% endif %}
