@@ -53,8 +53,14 @@
     key: "{{ newrelic_infra_repo_gpgkey }}"
     state: present
 
-- name: Install the New Relic Infrastructure Agent package.
+- name: Install the New Relic Infrastructure Agent package
   package:
     name: "{{ newrelic_infra_package }}"
     state: "{{ newrelic_infra_state }}"
-  notify: Restart New Relic Agent
+
+- name: Setup New Relic Infrastructure Agent Config file
+  template:
+    src: newrelic-infra.conf.j2
+    dest: "{{ newrelic_infra_config_file }}"
+  notify:
+    - Restart New Relic Agent

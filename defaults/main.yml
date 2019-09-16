@@ -1,5 +1,22 @@
 ---
-newrelic_infra_license_key: YOUR_LICENSE_KEY
+newrelic_infra_config_license_key: YOUR_LICENSE_KEY
+
+
+#newrelic_infra_config_display_name: {}
+newrelic_infra_config_event_queue_depth: 5000
+newrelic_infra_config_log_file: /var/log/newrelic-infra/nr-infra.log
+newrelic_infra_config_log_to_stdout: False
+newrelic_infra_config_net_iface_filter:
+  - p
+  - lo
+  - em
+#newrelic_infra_config_application: {}
+#newrelic_infra_config_data_center: {}
+#newrelic_infra_config_environment: {}
+#newrelic_infra_config_machine_type: {}
+#newrelic_infra_config_team: {}
+newrelic_infra_config_file: /etc/newrelic-infra.yml
+
 
 newrelic_infra_state: present
 #newrelic_infra_state: absent
@@ -13,9 +30,9 @@ newrelic_infra_repo_repo_gpgcheck: True
 
 
 
-newrelic_external_install: true
-newrelic_service_enabled: true
-newrelic_service_state: started
+#newrelic_external_install: true
+newrelic_infra_service_enabled: true
+newrelic_infra_service_state: started
 
 #newrelic_infra_packages:
 #- name: "newrelic-infra"
