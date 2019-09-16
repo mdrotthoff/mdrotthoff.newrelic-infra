@@ -47,3 +47,8 @@
     gpgkey: "{{ newrelic_infra_repo_gpgkey }}"
     proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
  
+ 
+- name: Install the RPM GPG key
+  rpm_key:
+    key: "{{ newrelic_infra_repo_gpgkey }}"
+    state: present
