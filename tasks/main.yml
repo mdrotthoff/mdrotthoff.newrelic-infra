@@ -40,7 +40,7 @@
 #  when: newrelic_infra_plugins is defined
 
 - name: Install plugins for the New Relic Infrastructure Agent
-  imports_tasks: "{{ item }}.yml"
+  include_tasks: "{{ item }}.yml"
   loop: "{{ newrelic_infra_plugins }}"
   when: newrelic_infra_plugins is defined
 

@@ -1,8 +1,8 @@
 ---
 newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 
-nri_elasticseach_package: nr-elasticsearch
-nri_elasticseach_config_file: /etc/newrelic-infra.yml/integrations.d/elasticsearch-config.yml
+nri_elasticsearch_package: nri-elasticsearch
+nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-config.yml
 nri_elasticsearch_cluster:
   - name: va-sdc-cluster
     command: all

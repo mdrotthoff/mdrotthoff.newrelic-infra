@@ -5,7 +5,7 @@
 
 - name: Install the New Relic Elasticsearch plugin
   package:
-    name: "{{ nri_elasticseach_package }}"
+    name: "{{ nri_elasticsearch_package }}"
     state: "{{ newrelic_infra_state }}"
   notify:
     - Restart New Relic Agent
@@ -14,6 +14,6 @@
 - name: Configure the New Relic Infrastructure Elasticsearch plugin
   template:
     src: nri-elasticsearch.yml.j2
-    dest: "{{ nri_elasticseach_config_file }}"
+    dest: "{{ nri_elasticsearch_config_file }}"
   notify:
     - Restart New Relic Agent

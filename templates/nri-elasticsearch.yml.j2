@@ -1,4 +1,19 @@
 instances:
+{{ nri_elasticsearch_cluster | to_nice_yaml }}
+
+instances:
 {% for cluster in nri_elasticsearch_cluster %}
-{{ cluster }}
+  - name: {{ cluster.name }}
+    command: {{ cluster.command }}
+    arguments:
+{% for argument in cluster.arguments %}
+      {{ argument }}: {{ cluster.arguments[argument] }}
 {% endfor %}
+{% if cluster.labels is defined %}
+    labels:
+{% for label in cluster.labels %}
+      {{ label }}: {{ cluster.labels[label] }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
