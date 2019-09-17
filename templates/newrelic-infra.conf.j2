@@ -11,9 +11,7 @@ display_name: {{ newrelic_infra_config_display_name }}
 event_queue_depth: {{ newrelic_infra_config_event_queue_depth }}
 {% endif -%}
 
-{%- if newrelic_infra_config_log_file is defined %}
-log_file: {{ newrelic_infra_config_log_file }}
-{% endif -%}
+log_file: "{{ newrelic_infra_config_log_path }}/{{ newrelic_infra_config_log_file }}"
 
 {%- if newrelic_infra_config_log_to_stdout is defined -%}
 log_to_stdout: {{ newrelic_infra_config_log_to_stdout }}

@@ -5,7 +5,8 @@ newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 newrelic_infra_config_file: /etc/newrelic-infra.yml
 newrelic_infra_config_display_name: "{{ display_name | default('Unknown') }}"
 newrelic_infra_config_event_queue_depth: 5000
-newrelic_infra_config_log_file: /var/log/newrelic-infra/nr-infra.log
+newrelic_infra_config_log_path: /var/log/newrelic-infra
+newrelic_infra_config_log_file: nr-infra.log
 newrelic_infra_config_log_to_stdout: False
 newrelic_infra_config_net_iface_filter:
   - p
