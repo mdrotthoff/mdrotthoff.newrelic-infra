@@ -1,0 +1,19 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+- name: Install the New Relic Elasticsearch plugin
+  package:
+    name: "{{ nri_elasticseach_package }}"
+    state: "{{ newrelic_infra_state }}"
+  notify:
+    - Restart New Relic Agent
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Configure the New Relic Infrastructure Elasticsearch plugin
+  template:
+    src: nri-elasticsearch.yml.j2
+    dest: "{{ nri_elasticseach_config_file }}"
+  notify:
+    - Restart New Relic Agent

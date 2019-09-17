@@ -1,6 +1,29 @@
 ---
 newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 
+nri_elasticseach_package: nr-elasticsearch
+nri_elasticseach_config_file: /etc/newrelic-infra.yml/integrations.d/elasticsearch-config.yml
+nri_elasticsearch_cluster:
+  - name: va-sdc-cluster
+    command: all
+    arguments:
+      cluster_environment: PROD
+      config_path: "/etc/elasticsearch/es-01/elasticsearch.yml"
+      hostname: va-elasticsearch.production.sdc.vauto.int
+      local_hostname: va-elasticsearch.production.sdc.vauto.int
+      port: 9200
+      timeout: 30
+      use_ssl: false
+      collect_indices: true
+      collect_primaries: true
+    labels:
+      cluster_name: va-sdc-cluster
+      application: Elasticsearch
+      component: VA
+      data_center: SDC
+      environment: Production
+      environment_state: Active
+      team: DBA
 
 newrelic_infra_config_file: /etc/newrelic-infra.yml
 newrelic_infra_config_display_name: "{{ display_name | default('Unknown') }}"
@@ -10,8 +33,8 @@ newrelic_infra_config_log_file: nr-infra.log
 newrelic_infra_config_log_to_stdout: False
 
 newrelic_infra_plugins:
-  - nri_elasticsearch
-  - nri_oracledb
+  - nri-elasticsearch
+#  - nri-oracledb
 
 newrelic_infra_config_net_iface_filter:
   - p

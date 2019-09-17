@@ -28,7 +28,7 @@
 
 - name: Setup New Relic Infrastructure Agent Config file
   template:
-    src: newrelic-infra.conf.j2
+    src: newrelic-infra.yml.j2
     dest: "{{ newrelic_infra_config_file }}"
   notify:
     - Restart New Relic Agent
