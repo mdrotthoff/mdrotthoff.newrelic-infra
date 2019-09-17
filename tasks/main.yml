@@ -24,6 +24,7 @@
     state: "{{ newrelic_infra_state }}"
   notify:
     - Restart New Relic Agent
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Setup New Relic Infrastructure Agent Config file
   template:
