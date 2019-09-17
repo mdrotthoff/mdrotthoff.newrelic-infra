@@ -36,7 +36,7 @@
 - name: Install plugins for the New Relic Infrastructure Agent
   debug:
     msg: "Installing {{ item }}"
-  loop: "{{ newrelic_infra_plugins}"
+  loop: "{{ newrelic_infra_plugins }}"
   when: newrelic_infra_plugins is defined
 
 - name: Configure logrotate to ensure the New Relic Infrastructure Agent log files remain under control
