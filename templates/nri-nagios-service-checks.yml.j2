@@ -1,8 +1,8 @@
 service_checks:
-{% for check in item.service_checks %}
+{% for check in check_item.service_checks %}
   - name: {{ check.name }}
-    command: {{ config.command }}
-    parse_output: {{ config.parse_output }}
+    command: [{% for cmd_part in check.command %} "{{ cmd_part }}", {% endfor %}]
+    parse_output: {{ check.parse_output }}
 {% if check.labels is defined %}
     labels:
 {% for label in check.labels %}

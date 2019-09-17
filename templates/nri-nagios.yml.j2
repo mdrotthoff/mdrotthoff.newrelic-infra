@@ -5,5 +5,5 @@ instances:
   - name: {{ config.name }}
     command: {{ config.command }}
     arguments:
-      service_check_config: {{ config.service_check_config }}
+      service_checks_config: {{ config.service_checks_config }}
 {% endfor %}
