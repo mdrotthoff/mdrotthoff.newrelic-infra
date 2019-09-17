@@ -1,33 +1,4 @@
-{# For backward compatibility, the license key will be written if it is defined #}
-{% if newrelic_infra_config_license_key is defined %}
-license_key: {{ newrelic_infra_config_license_key }}
-{% endif -%}
-
-{%- if newrelic_infra_config_display_name is defined %}
-display_name: {{ newrelic_infra_config_display_name }}
-{% endif -%}
-
-{%- if newrelic_infra_config_event_queue_depth is defined %}
-event_queue_depth: {{ newrelic_infra_config_event_queue_depth }}
-{% endif -%}
-
-log_file: "{{ newrelic_infra_config_log_path }}/{{ newrelic_infra_config_log_file }}"
-
-{%- if newrelic_infra_config_log_to_stdout is defined -%}
-log_to_stdout: {{ newrelic_infra_config_log_to_stdout }}
-{% endif -%}
-
-{%- if newrelic_infra_config_net_iface_filter is defined %}
-network_interface_filters:
-  prefix:
-{% for iface in newrelic_infra_config_net_iface_filter %}
-    - {{ iface }}
+instances:
+{% for cluster in nri_elasticsearch_cluster %}
+{{ cluster }}
 {% endfor %}
-{% endif %}
-
-{% if newrelic_infra_custom_config is defined %}
-custom_attributes:
-{% for item in newrelic_infra_custom_config %}
-  {{ item.key }}: {{ item.value }}
-{% endfor %}
-{% endif %}
