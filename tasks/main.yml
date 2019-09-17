@@ -33,9 +33,14 @@
   notify:
     - Restart New Relic Agent
 
+#- name: Install plugins for the New Relic Infrastructure Agent
+#  debug:
+#    msg: "Installing {{ item }}"
+#  loop: "{{ newrelic_infra_plugins }}"
+#  when: newrelic_infra_plugins is defined
+
 - name: Install plugins for the New Relic Infrastructure Agent
-  debug:
-    msg: "Installing {{ item }}"
+  imports_tasks: "{{ item }}.yml"
   loop: "{{ newrelic_infra_plugins }}"
   when: newrelic_infra_plugins is defined
 
