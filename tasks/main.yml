@@ -32,3 +32,16 @@
   notify:
     - Restart New Relic Agent
 
+- name: Configure logrotate to ensure the New Relic Infrastructure Agent log files remain under control
+  include_role:
+    name: mdrotthoff.logrotate
+  vars:
+    logrotate_scripts:
+      - name: newrelic_infra
+        paths:
+          - "{{ newrelic_infra_config_log_path }}/{{ newrelic_infra_config_log_file }}"
+        options:
+          - missingok
+          - compress
+          - delaycompress
+          - notifempty
