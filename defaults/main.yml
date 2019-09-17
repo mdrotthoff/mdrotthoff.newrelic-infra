@@ -8,10 +8,16 @@ newrelic_infra_config_event_queue_depth: 5000
 newrelic_infra_config_log_path: /var/log/newrelic-infra
 newrelic_infra_config_log_file: nr-infra.log
 newrelic_infra_config_log_to_stdout: False
+
+newrelic_infra_plugins:
+  - nri_elasticsearch
+  - nri_oracledb
+
 newrelic_infra_config_net_iface_filter:
   - p
   - lo
   - em
+
 newrelic_infra_custom_config:
   - key: application
     value: New Relic Plugins
