@@ -1,0 +1,12 @@
+service_checks:
+{% for check in item.service_checks %}
+  - name: {{ check.name }}
+    command: {{ config.command }}
+    parse_output: {{ config.parse_output }}
+{% if check.labels is defined %}
+    labels:
+{% for label in check.labels %}
+      {{ label }}: {{ check.labels[label] }}
+{% endfor %}
+{% endif %}
+{% endfor %}

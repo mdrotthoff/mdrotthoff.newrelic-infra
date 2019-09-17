@@ -1,9 +1,1195 @@
 ---
 newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 
+nri_nagios_package: nri-nagios
+nri_nagios_config_path: /etc/newrelic-infra/integrations.d
+nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"
+nri_nagios_config:
+  - name: nagios-oracle-db-ping
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-oracle-db-ping.yml"
+    service_checks:
+      - name: pdb2032_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2032.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2032
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2032.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2034_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2034.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2034
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2034.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2036_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2036.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2036
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2036.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2040_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2040.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2040_vip_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2040-vip.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040-vip.vauto.int
+          target_type: Host VIP
+          check_type: PING
+      - name: pdb2042_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2042.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2042_vip_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2042-vip.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042-vip.vauto.int
+          target_type: Host VIP
+          check_type: PING
+      - name: pdb2044_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2044.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2044_vip_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2044-vip.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044-vip.vauto.int
+          target_type: Host VIP
+          check_type: PING
+      - name: pdb2026_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2026.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: pdb2026_vip_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2026-vip.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026-vip.vauto.int
+          target_type: Host VIP
+          check_type: PING
+
+  - name: nagios-oracle-db-port-1521
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-oracle-db-port-1521.yml"
+    service_checks:
+      - name: pdb2032_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2032.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2032
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2032.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2034_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2034.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2034
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2034.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2036_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2036.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2036
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2036.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2040_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2040_vip_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040-vip.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2042_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2042_vip_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042-vip.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2044_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2044_vip_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044-vip.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2026_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 1521
+      - name: pdb2026_vip_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026-vip.vauto.int", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 1521
+      - name: scan1_port_1521
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "10.229.214.89", "-p", "1521"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: vap-scan-qts-01
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: vap-scan-qts-01.vauto.int
+          target_type: Cluster SCAN Host
+          check_type: PORT
+          check_port: 1521
+
+  - name: nagios-oracle-db-port-22
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-oracle-db-port-22.yml"
+    service_checks:
+      - name: pdb2032_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2032.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2032
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2032.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2034_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2034.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2034
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2034.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2036_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2036.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2036
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2036.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2040_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2040_vip_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040-vip.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2042_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2042_vip_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042-vip.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2044_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2044_vip_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044-vip.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2026_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: pdb2026_vip_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026-vip.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 22
+  
+  - name: nagios-oracle-db-port-21
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-oracle-db-port-21.yml"
+    service_checks:
+      - name: pdb2040_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2040_vip_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2040-vip.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2040
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2040-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2042_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2042_vip_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2042-vip.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2042
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2042-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2044_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2044_vip_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2044-vip.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2044
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2044-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2026_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 21
+      - name: pdb2026_vip_port_21
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "pdb2026-vip.vauto.int", "-p", "21"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Oracle
+          hostname: pdb2026
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: pdb2026-vip.vauto.int
+          target_type: Host VIP
+          check_type: PORT
+          check_port: 21
+
+  - name: nagios-elastic-search-ping
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-elastic-search-ping.yml"
+    service_checks:
+      - name: p03y02vemda0004_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vemda0004.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0004
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0004.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vemda0005_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vemda0005.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0005
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0005.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vemda0006_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vemda0006.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0006
+          node_type: Master
+          source_host: p03y02vemda0006.vauto.int
+          target_host: pdb2036.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02veqda0004_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02veqda0004.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0004
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0004.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02veqda0005_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02veqda0005.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0005
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0005.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02veqda0006_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02veqda0006.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0006
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0006.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vesda0006_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vesda0006.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0006
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0006.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vesda0007_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vesda0007.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0007
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0007.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vesda0008_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vesda0008.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0008
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0008.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vesda0009_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vesda0009.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0009
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0009.vauto.int
+          target_type: Host IP
+          check_type: PING
+      - name: p03y02vesda0010_ping
+        command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "p03y02vesda0010.vauto.int", "-w", "10,2%", "-c", "20,5%"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0010
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0010.vauto.int
+          target_type: Host IP
+          check_type: PING
+
+  - name: nagios-elastic-search-port-22
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-elastic-search-port-22.yml"
+    service_checks:
+      - name: p03y02vemda0004_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0004.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0004
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vemda0005_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0005.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0005
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vemda0006_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0006.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0006
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02veqda0004_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0004.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0004
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02veqda0005_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0005.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0005
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02veqda0006_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0006.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0006
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vesda0006_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0006.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0006
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vesda0007_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0007.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0007
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0007.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vesda0008_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0008.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0008
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0008.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+      - name: p03y02vesda0009_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0009.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0009
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0009.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+
+      - name: p03y02vesda0010_port_22
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0010.vauto.int", "-p", "22"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0010
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0010.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 22
+
+
+  - name: nagios-elastic-search-port-9200
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-elastic-search-port-9200.yml"
+    service_checks:
+      - name: p03y02vemda0004_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0004.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0004
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vemda0005_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0005.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0005
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vemda0006_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0006.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0006
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02veqda0004_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0004.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0004
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02veqda0005_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0005.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0005
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02veqda0006_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0006.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0006
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vesda0006_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0006.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0006
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vesda0007_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0007.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0007
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0007.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vesda0008_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0008.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0008
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0008.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vesda0009_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0009.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0009
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0009.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+      - name: p03y02vesda0010_port_9200
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0010.vauto.int", "-p", "9200"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0010
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0010.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9200
+
+  - name: nagios-elastic-search-port-9300
+    command: metrics
+    service_checks_config: "{{ nri_nagios_config_path }}/nagios-elastic-search-port-9300.yml"
+    service_checks:
+      - name: p03y02vemda0004_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0004.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0004
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vemda0005_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0005.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0005
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vemda0006_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vemda0006.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vemda0006
+          node_type: Master
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vemda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02veqda0004_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0004.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0004
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0004.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02veqda0005_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0005.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0005
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0005.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02veqda0006_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02veqda0006.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02veqda0006
+          node_type: Ingest
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02veqda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vesda0006_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0006.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0006
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0006.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vesda0007_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0007.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0007
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0007.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vesda0008_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0008.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0008
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0008.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vesda0009_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0009.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0009
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0009.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+      - name: p03y02vesda0010_port_9300
+        command: ["/usr/local/nagios/libexec/check_tcp", "-t", "5", "-H", "p03y02vesda0010.vauto.int", "-p", "9300"]
+        parse_output: true
+        labels:
+          environment: PROD
+          data_center: SDC
+          application: Elastic Search
+          hostname: p03y02vesda0010
+          node_type: Data
+          source_host: p03y02nrpaa0001.vauto.int
+          target_host: p03y02vesda0010.vauto.int
+          target_type: Host IP
+          check_type: PORT
+          check_port: 9300
+
 nri_elasticsearch_package: nri-elasticsearch
 nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-config.yml
-nri_elasticsearch_cluster:
+nri_elasticsearch_config:
   - name: va-sdc-cluster
     command: all
     arguments:
@@ -34,7 +1220,7 @@ newrelic_infra_config_log_to_stdout: False
 
 newrelic_infra_plugins:
   - nri-elasticsearch
-#  - nri-oracledb
+  - nri-nagios
 
 newrelic_infra_config_net_iface_filter:
   - p

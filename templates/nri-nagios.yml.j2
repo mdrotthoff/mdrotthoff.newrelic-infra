@@ -1,0 +1,9 @@
+integration_name: com.newrelic.nagios
+
+instances:
+{% for config in nri_nagios_config %}
+  - name: {{ config.name }}
+    command: {{ config.command }}
+    arguments:
+      service_check_config: {{ config.service_check_config }}
+{% endfor %}

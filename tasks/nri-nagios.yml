@@ -1,0 +1,26 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+- name: Install the New Relic Nagios plugin
+  package:
+    name: "{{ nri_nagios_package }}"
+    state: "{{ newrelic_infra_state }}"
+  notify:
+    - Restart New Relic Agent
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Configure the New Relic Infrastructure Nagios plugin
+  template:
+    src: nri-nagios.yml.j2
+    dest: "{{ nri_nagios_config_file }}"
+  notify:
+    - Restart New Relic Agent
+
+- name: Configure the New Relic Infrastructure Nagios plugin service checks
+  template:
+    src: nri-nagios-service-checks.yml.j2
+    dest: "{{ item.service_checks_config }}"
+  loop: "{{ nri_nagios_config }}"
+  when: nri_nagios_config is defined
