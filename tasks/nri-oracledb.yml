@@ -11,9 +11,10 @@
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
-#- name: Configure the New Relic Oracle DB plugin
-#  template:
-#    src: nri-oracledb.yml.j2
-#    dest: "{{ nri_oracledb_config_file }}"
-#  notify:
-#    - Restart New Relic Agent
+- name: Configure the New Relic Oracle DB plugin
+  template:
+    src: nri-oracledb.yml.j2
+    dest: "{{ nri_oracledb_config_file }}"
+  notify:
+    - Restart New Relic Agent
+  when: nri_oracledb_config is defined

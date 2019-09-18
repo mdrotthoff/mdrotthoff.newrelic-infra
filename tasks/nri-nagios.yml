@@ -11,12 +11,22 @@
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install the supplemental packages required by the New Relic Nagios plugin
+  package:
+    name: "{{ nri_nagios_supplemental_packages }}"
+    state: "{{ newrelic_infra_state }}"
+  notify:
+    - Restart New Relic Agent
+  when: nri_nagios_supplemental_packagesis defined
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Configure the New Relic Infrastructure Nagios plugin
   template:
     src: nri-nagios.yml.j2
     dest: "{{ nri_nagios_config_file }}"
   notify:
     - Restart New Relic Agent
+  when: nri_nagios_config is defined
 
 - name: Configure the New Relic Infrastructure Nagios plugin service checks
   template:

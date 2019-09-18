@@ -17,3 +17,4 @@
     dest: "{{ nri_elasticsearch_config_file }}"
   notify:
     - Restart New Relic Agent
+  when: nri_elasticsearch_config is defined
