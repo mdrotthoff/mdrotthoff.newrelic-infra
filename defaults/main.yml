@@ -1,6 +1,11 @@
 ---
 newrelic_infra_config_license_key: YOUR_LICENSE_KEY
 
+nri_oracledb_package: nri-oracledb
+nri_oracledb_config_path: /etc/newrelic-infra/integrations.d
+nri_oracledb_config_file: "{{ nri_nagios_config_path }}/oracledb-config.yml"
+
+
 nri_nagios_package: nri-nagios
 nri_nagios_config_path: /etc/newrelic-infra/integrations.d
 nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"

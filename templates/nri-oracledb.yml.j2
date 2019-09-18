@@ -1,0 +1,16 @@
+instances:
+{% for config in nri_elasticsearch_config %}
+  - name: {{ config.name }}
+    command: {{ config.command }}
+    arguments:
+{% for argument in config.arguments %}
+      {{ argument }}: {{ config.arguments[argument] }}
+{% endfor %}
+{% if config.labels is defined %}
+    labels:
+{% for label in config.labels %}
+      {{ label }}: {{ config.labels[label] }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
