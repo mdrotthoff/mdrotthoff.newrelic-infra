@@ -9,7 +9,7 @@ newrelic_infra_plugins:
 nri_oracledb_package: nri-oracledb
 nri_oracledb_config_path: /etc/newrelic-infra/integrations.d
 nri_oracledb_config_file: "{{ nri_nagios_config_path }}/oracledb-config.yml"
-nri_oracledb_config:
+nri_oracledb_config: []
 
 
 

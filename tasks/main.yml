@@ -42,7 +42,9 @@
 - name: Install plugins for the New Relic Infrastructure Agent
   include_tasks: "{{ item }}.yml"
   loop: "{{ newrelic_infra_plugins }}"
-  when: newrelic_infra_plugins is defined
+  when:
+    - newrelic_infra_plugins is defined
+ 
 
 - name: Configure logrotate to ensure the New Relic Infrastructure Agent log files remain under control
   include_role:

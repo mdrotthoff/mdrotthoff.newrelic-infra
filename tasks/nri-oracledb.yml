@@ -17,4 +17,7 @@
     dest: "{{ nri_oracledb_config_file }}"
   notify:
     - Restart New Relic Agent
-  when: nri_oracledb_config is defined
+  when:
+    - nri_oracledb_config is defined
+    - nri_oracledb_config | length > 0
+
