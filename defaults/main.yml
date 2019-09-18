@@ -87,6 +87,7 @@ nri_nagios_config:
           target_host: pdb2026.vauto.int
           target_type: Host IP
           check_type: PING
+      - name: pdb2026_vip_ping
         command: ["/usr/local/nagios/libexec/check_ping", "-t", "5", "-H", "pdb2026-vip.vauto.int", "-w", "10,2%", "-c", "20,5%"]
         parse_output: true
         labels:

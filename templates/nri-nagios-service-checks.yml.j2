@@ -3,12 +3,12 @@ service_checks:
   - name: {{ check.name }}
     command: [{% for cmd_part in check.command %} "{{ cmd_part }}", {% endfor %}]
     parse_output: {{ check.parse_output }}
-{% if check_items.service_checks_labels is defined or check.labels is defined %}
+{% if check_item.service_checks_labels is defined or check.labels is defined %}
     labels:
 {% endif %}
-{% if check_items.service_checks_labels is defined %}
-{% for label in check_items.service_checks_labels %}
-      {{ label }}: {{ check_items.service_checks_labels[label] }}
+{% if check_item.service_checks_labels is defined %}
+{% for label in check_item.service_checks_labels %}
+      {{ label }}: {{ check_item.service_checks_labels[label] }}
 {% endfor %}
 {% endif %}
 {% if check.labels is defined %}
