@@ -4,11 +4,14 @@
 # $Source$
 
 - name: Restart New Relic Agent
-  block:
-    service:
-      name: "{{ newrelic_infra_service_name }}"
-      state: stopped
+  include_tasks: newrelic_restart.yml
 
-    service:
-      name: "{{ newrelic_infra_service_name }}"
-      state: "{{ newrelic_infra_service_state }}"
+#- name: Restart New Relic Agent
+#  block:
+#    service:
+#      name: "{{ newrelic_infra_service_name }}"
+#      state: stopped
+#
+#    service:
+#      name: "{{ newrelic_infra_service_name }}"
+#      state: "{{ newrelic_infra_service_state }}"
