@@ -17,7 +17,7 @@ log_file: "{{ newrelic_infra_config_log_path }}/{{ newrelic_infra_config_log_fil
 log_to_stdout: {{ newrelic_infra_config_log_to_stdout }}
 {% endif -%}
 
-{%- if newrelic_infra_config_net_iface_filter is defined %}
+{%- if newrelic_infra_config_net_iface_filter is defined and newrelic_infra_config_net_iface_filter | length > 0 %}
 network_interface_filters:
   prefix:
 {% for iface in newrelic_infra_config_net_iface_filter %}
@@ -25,9 +25,9 @@ network_interface_filters:
 {% endfor %}
 {% endif %}
 
-{% if newrelic_infra_custom_config is defined %}
+{% if newrelic_infra_custom_config is defined and newrelic_infra_custom_config | length > 0 %}
 custom_attributes:
 {% for item in newrelic_infra_custom_config %}
-  {{ item.key }}: {{ item.value }}
+      {{ label }}: {{ newrelic_infra_custom_config[item] }}
 {% endfor %}
 {% endif %}

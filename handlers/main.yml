@@ -4,6 +4,11 @@
 # $Source$
 
 - name: Restart New Relic Agent
-  service:
-    name: newrelic-infra
-    state: restarted
+  block:
+    service:
+      name: "{{ newrelic_infra_service_name }}"
+      state: stopped
+
+    service:
+      name: "{{ newrelic_infra_service_name }}"
+      state: "{{ newrelic_infra_service_state }}"
