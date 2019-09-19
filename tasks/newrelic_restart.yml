@@ -1,0 +1,14 @@
+---
+# $Author$
+# $Date$
+# $Source$
+
+- name: Stop the New Relic Infrastructure Agent
+  service:
+    name: "{{ newrelic_infra_service_name }}"
+    state: stopped
+
+- name: Set the New Relic Infrastructure Agent to the desired state
+  service:
+    name: "{{ newrelic_infra_service_name }}"
+    state: "{{ newrelic_infra_service_state }}"
