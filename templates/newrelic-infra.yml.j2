@@ -28,6 +28,6 @@ network_interface_filters:
 {% if newrelic_infra_custom_config is defined and newrelic_infra_custom_config | length > 0 %}
 custom_attributes:
 {% for item in newrelic_infra_custom_config %}
-      {{ label }}: {{ newrelic_infra_custom_config[item] }}
+      {{ item }}: {{ newrelic_infra_custom_config[item] }}
 {% endfor %}
 {% endif %}

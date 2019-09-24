@@ -18,12 +18,12 @@ newrelic_infra_config_log_to_stdout: False
 #newrelic_infra_config_net_iface_filter:
 #  - lo
 
-## Details required to create a Yum configuration for the New Relic repository
-#newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64
-#newrelic_infra_repo_gpgkey: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
-#newrelic_infra_repo_gpgcheck: True
-#newrelic_infra_repo_repo_gpgcheck: True
-##newrelic_infra_repo_proxy: "<Proxy server to use for the Yum repository>"
+# Details required to create a Yum configuration for the New Relic repository
+newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/linux/yum/el/7/x86_64
+newrelic_infra_repo_gpgkey: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
+newrelic_infra_repo_gpgcheck: True
+newrelic_infra_repo_repo_gpgcheck: True
+#newrelic_infra_repo_proxy: "<Proxy server to use for the Yum repository>"
 
 ## Custom attributes to be added to the New Relic configuration file
 #newrelic_infra_custom_config:
@@ -49,15 +49,13 @@ nri_oracledb_config_path: /etc/newrelic-infra/integrations.d
 nri_oracledb_config_file: "{{ nri_nagios_config_path }}/oracledb-config.yml"
 nri_oracledb_config: []
 
-
-
 ## New Relic Elastic Search plugin configuration
-#nri_elasticsearch_package: nri-elasticsearch
-#nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-config.yml
+nri_elasticsearch_package: nri-elasticsearch
+nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-config.yml
 #nri_elasticsearch_config:
 #  - name: va-sdc-cluster
 #    command: all
-#    arguments:
+:#    arguments:
 #      cluster_environment: PROD
 #      config_path: "/etc/elasticsearch/es-01/elasticsearch.yml"
 #      hostname: va-elasticsearch.production.sdc.vauto.int
@@ -76,16 +74,17 @@ nri_oracledb_config: []
 #      environment_state: Active
 #      team: DBA
 #
-## New Relic Nagios plugin configuration
-#nri_nagios_package: nri-nagios
-#nri_nagios_config_path: /etc/newrelic-infra/integrations.d
-#nri_nagios_supplemental_packages:
-#  - nagios-plugins-ping
-#  - nagios-plugins-tcp
-#  - nagios-plugins-oracle
-#nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"
-#nri_nagios_check_ping_cmd: /usr/lib64/nagios/plugins/check_ping
-#nri_nagios_check_tcp_cmd: /usr/lib64/nagios/plugins/check_tcp
+
+# New Relic Nagios plugin configuration
+nri_nagios_package: nri-nagios
+nri_nagios_config_path: /etc/newrelic-infra/integrations.d
+nri_nagios_supplemental_packages:
+  - nagios-plugins-ping
+  - nagios-plugins-tcp
+  - nagios-plugins-oracle
+nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"
+nri_nagios_check_ping_cmd: /usr/lib64/nagios/plugins/check_ping
+nri_nagios_check_tcp_cmd: /usr/lib64/nagios/plugins/check_tcp
 #nri_nagios_config:
 #  - name: nagios-oracle-db-ping
 #    command: metrics
