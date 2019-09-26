@@ -4,7 +4,13 @@ instances:
     command: {{ config.command }}
     arguments:
 {% for argument in config.arguments %}
+{% if argument == 'tablespaces' %}
+{% if config.arguments[argument] | length > 0 %}
+      tablespaces: [{% for tablespace in config.arguments[argument] %} "{{ tablespace }}", {% endfor %}]
+{% endif %}
+{% else %}
       {{ argument }}: {{ config.arguments[argument] }}
+{% endif %}
 {% endfor %}
 {% if config.labels is defined %}
     labels:
