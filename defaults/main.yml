@@ -8,6 +8,7 @@ newrelic_infra_service_state: started
 
 # Basic New Relic configuration
 newrelic_infra_config_file: /etc/newrelic-infra.yml
+newrelic_infra_config_plugin: /etc/newrelic-infra/integrations.d
 newrelic_infra_config_display_name: "{{ display_name | default('Unknown') }}"
 newrelic_infra_config_event_queue_depth: 5000
 newrelic_infra_config_log_path: /var/log/newrelic-infra
@@ -36,6 +37,7 @@ newrelic_infra_repo_repo_gpgcheck: True
 #  physical_name: "{{ physical_name | default('Unknown') }}"
 
 # New Relic Infrastructure plugins to install
+newrelic_infra_plugins: []
 #newrelic_infra_plugins:
 #  - nri-elasticsearch
 #  - nri-nagios
@@ -45,14 +47,37 @@ newrelic_infra_repo_repo_gpgcheck: True
 
 # New Relic Oracle DB plugin configuration
 nri_oracledb_package: nri-oracledb
-nri_oracledb_config_path: /etc/newrelic-infra/integrations.d
-nri_oracledb_config_file: "{{ nri_nagios_config_path }}/oracledb-config.yml"
+nri_oracledb_config_path: "{{ newrelic_infra_config_plugin }}"
+nri_oracledb_config_file: "{{ nri_oracledb_config_path }}/oracledb-config.yml"
 nri_oracledb_config: []
+#nri_oracledb_config:
+#  - name: DB1
+#    command: all_data
+#    arguments:
+#      hostname: vap-scan-qts-01.vauto.int
+#      service_name: vapm1_app
+#      port: 1521
+#      username: newrelic_user
+#      password: NewRelic_User_DB_Password
+#      is_sys_dba: False
+#      is_sys_oper: False
+#      extended_metrics: True
+#      tablespaces: []
+#    labels:
+#      data_center: Laptop VM
+#      environment: Individual
+#      machine_type: Virtual Machine
+#      team: David Rotthoff
+#      friendly_name: "{{ friendly_name | default('Unknown') }}"
+#      physical_name: "{{ physical_name | default('Unknown') }}"
+#      environment_state: Active
 
 
 ## New Relic Elastic Search plugin configuration
 nri_elasticsearch_package: nri-elasticsearch
-nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-config.yml
+nri_elasticsearch_config_path: "{{ newrelic_infra_config_plugin }}"
+nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearch-config.yml"
+nri_elasticsearch_config: []
 #nri_elasticsearch_config:
 #  - name: va-sdc-cluster
 #    command: all
@@ -78,14 +103,15 @@ nri_elasticsearch_config_file: /etc/newrelic-infra/integrations.d/elasticsearch-
 
 # New Relic Nagios plugin configuration
 nri_nagios_package: nri-nagios
-nri_nagios_config_path: /etc/newrelic-infra/integrations.d
 nri_nagios_supplemental_packages:
   - nagios-plugins-ping
   - nagios-plugins-tcp
   - nagios-plugins-oracle
+nri_nagios_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"
 nri_nagios_check_ping_cmd: /usr/lib64/nagios/plugins/check_ping
 nri_nagios_check_tcp_cmd: /usr/lib64/nagios/plugins/check_tcp
+nri_nagios_config: []
 #nri_nagios_config:
 #  - name: nagios-oracle-db-ping
 #    command: metrics

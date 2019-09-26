@@ -25,9 +25,9 @@ network_interface_filters:
 {% endfor %}
 {% endif %}
 
-{% if newrelic_infra_custom_config is defined and newrelic_infra_custom_config | length > 0 %}
+{% if newrelic_infra_custom_attributes is defined and newrelic_infra_custom_attributes | length > 0 %}
 custom_attributes:
-{% for item in newrelic_infra_custom_config %}
-      {{ item }}: {{ newrelic_infra_custom_config[item] }}
+{% for item in newrelic_infra_custom_attributes %}
+      {{ item }}: {{ newrelic_infra_custom_attributes[item] }}
 {% endfor %}
 {% endif %}
