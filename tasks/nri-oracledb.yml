@@ -14,7 +14,7 @@
 - name: Dump variable nri_oracledb_config
   debug:
     var: nri_oracledb_config
-#    verbosity: "{{ debug_level | default(1) }}"
+    verbosity: "{{ debug_level | default(1) }}"
 
 - name: Configure the New Relic Oracle DB plugin
   template:
