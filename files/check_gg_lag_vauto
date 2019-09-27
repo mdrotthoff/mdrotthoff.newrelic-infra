@@ -1,0 +1,114 @@
+#! /bin/bash
+
+ORACLE_DBNAME=
+GG_NAME=
+CRITICAL=1800
+WARNING=600
+
+E_OK=0
+E_WARNING=1
+E_CRITICAL=2
+E_UNKNOWN=3
+
+# Show the plugin help
+show_help() {
+  echo "$0 -d ORACLE_DBNAME -g GG_NAME -w LAG_TIME -c LAG_TIME | -h"
+  echo
+  echo "This plug-in is used to be alerted when lag in a Golden Gate process"
+  echo "reaches the maximum time allowed.  It returns a metric of the current"
+  echo "seconds of lag."
+  echo
+  echo "  -d ORACLE_DBNAME  Oracle database name (not instance name)"
+  echo "  -g GG_NAME        Golden Gate process name"
+  echo "  -w LAG_TIME       Warning lag time in seconds (default 600 seconds)"
+  echo "  -c LAG_TIME       Critical lag time in seconds (default 1800 seconds)"
+  echo
+  echo " example: $0 -d VADM -g ETOAWS -w 600 -c 1800"
+}
+
+# Get the lag report for the specified GG process
+get_gg_lag() {
+./ggsci <<ScriptEOF
+lag ${GG_NAME}
+quit
+ScriptEOF
+}
+
+# Process the supplied arguments
+while [ ! -z "$1" ]; do
+  case $1 in
+       -d)          shift; ORACLE_DBNAME="$1" ;;
+       -g)          shift; GG_NAME="$1" ;;
+       -c)          shift; CRITICAL="$1" ;;
+       -w)          shift; WARNING="$1" ;;
+       -h)          show_help
+                    exit ${E_UNKNOWN} ;;
+  esac
+  shift
+done
+
+# Validate that a database and process name where provided
+if [[ -z "${ORACLE_DBNAME}" ]] ; then
+  echo "Oracle database name not provided"
+  show_help
+  exit ${E_UNKNOWN}
+fi
+if [[ -z "${GG_NAME}" ]] ; then
+  echo "Golden Gate process name not provided"
+  show_help
+  exit ${E_UNKNOWN}
+fi
+
+# Load the system defaults
+source "$(dirname "${0}")/check_gg_lag_vauto.cfg"
+export ORACLE_DBNAME
+export GG_NAME
+export ORACLE_HOME
+export GG_HOME
+export LD_LIBRARY_PATH
+
+# Make sure the calculated GG home directory exists
+if ! [[ -d "${GG_HOME}" ]] ; then
+  echo "Golden Gate home directory not found at ${GG_HOME}"
+  exit ${E_UNKNOWN}
+fi
+
+# Get the lag for the GG process (time & increment)
+cd "${GG_HOME}" || exit ${E_UNKNOWN}
+while read -r l_line ; do
+  if [[ $(echo "${l_line}" | grep -c "Invalid command.") -gt 0 ]] ; then
+    echo "DB: ${ORACLE_DB} GG: ${GG_NAME} Output: ${l_line}"
+    exit ${E_UNKNOWN}
+  fi
+  if [[ $(echo "${l_line}" | grep -c "No records yet processed.") -gt 0 ]] ; then
+    echo "${l_line} | Lag=0s;${WARNING};${CRITICAL};;"
+    exit ${E_OK}
+  fi
+  read -r l_lag_time l_lag_time_inc < <(echo "$l_line" | awk '{ print $4 " " $5 }')
+  lag_time="${l_lag_time}"
+  lag_time_inc="${l_lag_time_inc}"
+  break
+done < <(get_gg_lag \
+         | grep -E 'Invalid command|record lag|No records')
+
+# Calculate the lag as seconds
+case "${lag_time_inc}" in
+     seconds.) calc_lag_time=${lag_time//,} ;;
+     minutes.) calc_lag_time=$((${lag_time//,} * 60)) ;;
+     hours.)   calc_lag_time=$((${lag_time//,} * 3600)) ;;
+     *)        calc_lag_time=$((${lag_time//,} * 43200)) ;;
+esac
+
+# Check to see if we are in a warning or critical state
+exit_code=${E_OK}
+if [[ ${calc_lag_time} -gt ${CRITICAL} ]] ; then
+  exit_code=${E_CRITICAL} 
+elif [[ ${calc_lag_time} -gt ${WARNING} ]] ; then
+  exit_code=${E_WARNING}
+fi
+
+# Generate the standard output
+output_data="Current lag for ${GG_NAME} on ${ORACLE_DBNAME} is ${lag_time} ${lag_time_inc}"
+perf_data="Lag=${calc_lag_time}s;${WARNING};${CRITICAL};;"
+echo "${output_data} | ${perf_data}"
+exit ${exit_code}

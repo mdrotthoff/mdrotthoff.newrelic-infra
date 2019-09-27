@@ -6,7 +6,7 @@ instances:
 {% for argument in config.arguments %}
       {{ argument }}: {{ config.arguments[argument] }}
 {% endfor %}
-{% if config.labels is defined %}
+{% if config.labels is defined and config.labels | length > 0 %}
     labels:
 {% for label in config.labels %}
       {{ label }}: {{ config.labels[label] }}

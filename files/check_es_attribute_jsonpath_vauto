@@ -1,0 +1,711 @@
+#!/usr/bin/python
+from pprint import pprint, pformat
+
+import urllib2
+import optparse
+import sys
+import time
+import os
+import socket
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+#import jsonpath_rw
+from jsonpath_rw import jsonpath, parse
+
+usage = "[options]"
+version = "0.3.0"
+debug_flag = False
+debug_debugging_flag = False
+verbose_flag = False
+
+NAGIOS_OK = 0
+NAGIOS_WARNING = 1
+NAGIOS_CRITICAL = 2
+NAGIOS_UNKNOWN = 3
+
+#	Sample attribute names
+#	os.cpu.usage
+#	os.mem.used_percent
+#	process.cpu.percent
+#	jvm.mem.heap_used_percent
+#	jvm.gc.collectors.young.collection_count
+#	jvm.gc.collectors.young.collection_time_in_millis
+#	jvm.gc.collectors.old.collection_count
+#	jvm.gc.collectors.old.collection_time_in_millis        
+
+
+####################################################
+# Print the debug output if so requested.          #
+####################################################
+def debug_output(msg):
+#	if debug_debugging_flag:
+#		print ('**********************************')
+#		print ('* Entered debug_output function  *')
+#		print ('**********************************')
+
+	if debug_flag:
+		print ('DEBUG: ' + str(msg))
+
+#	if debug_debugging_flag:
+#		print ('Exiting debug_output function')
+#		print ('')
+
+
+####################################################
+# Print the verbose output if so requested.        #
+####################################################
+def verbose_output(msg):
+#	if debug_debugging_flag:
+#		debug_output ('***********************************')
+#		debug_output ('* Entered verbose_output function *')
+#		debug_output ('***********************************')
+
+	if verbose_flag or debug_flag:
+		if msg != None:
+			print (str(msg))
+
+#	if debug_debugging_flag:
+#		debug_output ('Exiting verbose_output function')
+#		debug_output ('')
+
+
+####################################################
+# Print the dump of the supplied object            #
+####################################################
+def object_dump(obj, msg):
+#	debug_output ('**********************************')
+	debug_output ('* Entered object_dump function   *')
+#	debug_output ('**********************************')
+
+#	Print the user message and object type
+	verbose_output (str(msg) + ' -- ' + str(type(obj)))
+#	Print the object dump
+	verbose_output (pformat(obj))
+	verbose_output('')
+
+	debug_output ('Exiting object_dump function')
+	debug_output ('')
+
+
+####################################################
+# Define the option values with the parser will    #
+# accept as valid. Include default values and      #
+# boolean flags.                                   #
+####################################################
+def define_opts(parser):
+#	debug_output ('**********************************')
+	debug_output ('* Entered define_opts function   *')
+#	debug_output ('**********************************')
+
+#	Add all parameter source options to parser array
+	source_group = optparse.OptionGroup(parser, 'Source options',
+											'This group of options control where the '
+											'Elastic Search data can be found.')
+	source_group.add_option('-H',
+							'--hostname',
+							dest='hostname',
+							default='localhost',
+							action="store",
+							type='string',
+							help='The host for the cluster to check - defaults to localhost')
+	source_group.add_option('-p',
+							'--port',
+							dest='port',
+							default=9200,
+							action="store",
+							type='int',
+							help='The ElasticSearch port - defaults to 9200')
+	source_group.add_option('-P', 
+							'--page-url',
+							dest='page_url',
+							action="store",
+							type='string',
+							help='[REQUIRED] The ES URL from which the data is to be read')
+	source_group.add_option('-t',
+							'--timeout',
+							dest='timeout',
+							default=30,
+							action="store",
+							type='int',
+							help='Timeout for the service check - defaults to 30')
+	source_group.add_option('-a',
+							'--attribute',
+							dest='attribute',
+							action="store",
+							type='string',
+							help='[REQUIRED] The attribute name you want to check (ex os.cpu.usage, jvm.mem.heap_used_percent)') 
+	parser.add_option_group(source_group)
+	
+#	Add all parameter comparison options to parser array
+	compare_group = optparse.OptionGroup(parser, 'Comparison options',
+										'This group of options control comparison of '
+										'the JSON data with the supplied thresholds.  Either '
+										'all values or no values must be supplied to the '
+										'entire group')
+	compare_group.add_option('-o',
+								'--operator',
+								dest='operator',
+								action="store",
+								choices=['==', '!=', '<=', '<', '>=', '>',],
+								help='The comparison operator to be used when checking warning and critical values')
+	compare_group.add_option('-c',
+								'--critical',
+								dest='critical',
+								action="store",
+								help='The level at which we throw a CRITICAL alert')
+	compare_group.add_option('-w',
+								'--warning',
+								dest='warning',
+								action="store",
+								help='The level at which we throw a WARNING alert')
+	compare_group.add_option('-C',
+								'--compare-type',
+								dest='compare_type',
+								action="store",
+								choices=['string', 'number',],
+								help='The data type the comparison should be performed with')
+	parser.add_option_group(compare_group)
+
+#	Add all debugging parameter options to parser array
+	debug_group = optparse.OptionGroup(parser, 'Debugging options',
+										'This group of options control various levels of '
+										'output provided by the plugin')
+
+	debug_group.add_option('-d',
+							'--debug',
+							dest='debug',
+							default=False,
+							action="store_true",
+							help='Whether or not debugging output should be generated')
+	debug_group.add_option('-v',
+							'--verbose',
+							dest='verbose',
+							default=False,
+							action="store_true",
+							help='Whether or not verbose output should be generated')
+	debug_group.add_option('-q',
+							'--quiet',
+							dest='verbose',
+							action="store_false",
+							help='Whether or not verbose output should be generated')
+	parser.add_option_group(debug_group)
+
+#	Add all miscellaneous options to parser array
+	misc_group = optparse.OptionGroup(parser, 'Miscellaneous options',
+										'A group of miscellaneous options which provides '
+										'greater control of what is examained and output.')
+	misc_group.add_option('-f',
+							'--filter',
+							dest='filter',
+							action="store",
+							type='string',
+							help='The JSON key under with searching should start.  Note: this '
+									'is an absolute reference without any wild card support') 
+	misc_group.add_option('-u',
+							'--uom',
+							dest='unit_of_measure',
+							action="store",
+							type='string',
+							help='The unit of measurement to be used for performance data.  Performance data will only '
+									'be reported when the unit is provided')
+	parser.add_option_group(misc_group)
+
+	debug_output ('Exiting define_opts function')
+	debug_output ('')
+
+
+####################################################
+# Dump the option values provided on the command   #
+# line as they were parsed.                        #
+####################################################
+def print_opts(opts):
+#	debug_output ('**********************************')
+	debug_output ('* Entered print_opts function    *')
+#	debug_output ('**********************************')
+
+	verbose_output ('Option count: ' + str(len(opts.__dict__)))
+	verbose_output ('Options dump:')
+	for key, value in sorted(opts.__dict__.iteritems()):
+		verbose_output ('\t' + key + ': ' + str(value))
+	verbose_output ('')
+
+	debug_output ('Exiting print_opts function')
+	debug_output ('')
+
+
+####################################################
+# Dump the option values provided on the command   #
+# line as they were parsed.                        #
+####################################################
+def print_args(args):
+#	debug_output ('**********************************')
+	debug_output ('* Entered print_args function    *')
+#	debug_output ('**********************************')
+
+	verbose_output ('Argument count: ' + str(len(args)))
+	verbose_output ('Arguments dump:')
+	for value in args:
+		verbose_output ('\t' + str(value))
+	verbose_output ('')
+
+	debug_output ('Exiting print_args function')
+	debug_output ('')
+
+
+####################################################
+# Validate the option values provided on the       #
+# command line.  Unacceptable values should result #
+# with an output message and an exit status of     #
+# NAGIOS_UNKNOWN.                                  #
+####################################################
+def validate_opts(opts):
+	global debug_flag
+	global verbose_flag
+	valid_operators = {'<=', '<', '==', '!=', '>', '>='}
+	invalid_opts = False
+
+#	debug_output ('**********************************')
+	debug_output ('* Entered validate_opts function *')
+#	debug_output ('**********************************')
+
+#	Make sure we know what attribute to find
+	if opts.attribute is None:
+		print ('-a|--attribute is required')
+		invalid_opts = True
+
+#	Ensure that the server name has been provided
+	if opts.hostname is None:
+		print ('-H|--hostname is required')
+		invalid_opts = True
+
+#	Ensure that the page URL needed to check the status
+#	is provided
+	if opts.page_url is None:
+		print ('-P|--page-url is required')
+		invalid_opts = True
+
+#	Ensure that a valid operator (or none) was provided
+	debug_output('Valid operators:')
+	debug_output(valid_operators)
+
+	if opts.operator is not None:
+		if opts.operator not in valid_operators:
+			print ('Invalid operator %s was supplied' % opts.operator)
+			invalid_opts = True
+	
+#	Ensure that the alerting values are either set or ignored
+#	as a group
+	if opts.warning is None and opts.critical is None and opts.operator is None and opts.compare_type is None:
+		None
+	elif opts.warning is not None and opts.critical is not None and opts.operator is not None and opts.compare_type is not None:
+		None
+	else:
+		print ('Must set options warning, critical, operator and compare type in a consistent fashion')
+		invalid_opts = True
+
+#	Set the global variables used for conditional output
+	if opts.debug:
+		opts.verbose = True
+		debug_flag = True
+	if opts.verbose:
+		verbose_flag = True
+
+	debug_output ('Exiting validate_opts function')
+	debug_output ('')
+
+#	If an option is found to be invalid, then
+#	exit in an unknown state
+	if invalid_opts:
+		sys.exit(NAGIOS_UNKNOWN)
+
+
+####################################################
+# Construct the URL needed to check the Elastic    #
+# Search attribute.                                #
+####################################################
+def construct_url(opts):
+#	debug_output ('**********************************')
+	debug_output ('* Entered construct_url function *')
+#	debug_output ('**********************************')
+
+	debug_output ('Hostname: ' + str(opts.hostname))
+	debug_output ('Port: ' + str(opts.port))
+
+	request_url = 'http://' + str(opts.hostname) + ':' + str(opts.port) + '/' + str(opts.page_url)
+	verbose_output ('Request URL: %s' % request_url)
+	verbose_output ('')
+
+	debug_output ('Exiting construct_url function')
+	debug_output ('')
+
+	return request_url
+
+
+####################################################
+# Read the data from the Elastic Search server     #
+####################################################
+def read_json(request_url, request_timeout):
+#	debug_output ('**********************************')
+	debug_output ('* Entered read_json function     *')
+#	debug_output ('**********************************')
+
+	#Read the desired page from the Elastic Search server
+	socket.setdefaulttimeout(request_timeout)
+	try:       
+		response = urllib2.urlopen(request_url)        
+		response_body = response.read()
+	except urllib2.HTTPError, e:
+		raise Status('Unknown', ("API failure", None,
+								 "API failure:\n\n%s" % str(e)))
+	except urllib2.URLError, e:
+		raise Status('Critical', (e.reason))
+	except Exception, e:
+		print ('API failure:\n\n%s' % str(e))
+		sys.exit(NAGIOS_CRITICAL)
+
+#	Validate that an actual response was received
+	debug_output ('Response body: %s' % (response_body))
+	debug_output ('')
+
+	if response_body is None:
+		print ('API returned empty response')
+		sys.exit(NAGIOS_UNKNOWN)
+
+	#Load the JSON data into a JSON object
+	try:
+		json_data = json.loads(response_body)
+		object_dump(json_data, 'JSON response loaded')
+	except ValueError:
+		object_dump(json_data, 'API returned nonsense response')
+		sys.exit(NAGIOS_UNKNOWN)
+
+	debug_output ('Exiting read_json function')
+	debug_output ('')
+	return json_data
+
+
+####################################################
+# Filter the returned JSON data based on the       #
+# supplied conditions.                             #
+####################################################
+def filter_json(json_data, json_filter):
+#	debug_output ('**********************************')
+	debug_output ('* Entered filter_json function   *')
+#	debug_output ('**********************************')
+
+	json_filter_list = json_filter.split('.')
+	object_dump (json_filter_list, 'JSON filter list')
+
+	debug_output ('Node count: ' + str(len(json_data)))
+	
+	for filter_value in json_filter_list:
+		debug_output ('Processing filter ' + str(filter_value))
+		debug_output ('')
+		json_data = json_data[filter_value]
+		object_dump(json_data, 'JSON data after applying filter ' + filter_value + ' -- Node count: ' + str(len(json_data)))
+
+	debug_output ('Exiting filter_json function')
+	debug_output ('')
+
+	return json_data
+
+
+####################################################
+# Make the requested comparison to the JSON data   #
+####################################################
+def value_cast(compare_type, source_value):
+#	debug_output ('*************************************')
+	debug_output ('* Entered value_cast function    *')
+#	debug_output ('*************************************')
+
+	debug_output ('Compare type: ' + str(compare_type))
+	debug_output ('Source value: ' + str(source_value) + ' Type:' + str(type(source_value)))
+
+	try:
+		if compare_type == 'string':
+			return_value = str(source_value)
+		elif compare_type == 'number':
+			return_value = float(source_value)
+		else:
+			print ('Invalid comparison data type')
+			sys.exit(NAGIOS_UNKNOWN)
+
+#	If an exception occurs, display an error message and exit
+	except ValueError:
+		print ('Unable to cast value ' + str(source_value) + ' to type ' + str(compare_type))
+#		print ('\tJSON attribute: ' + str(json_data[attribute]))
+#		print ('\tWarning threshold: ' + str(warning))
+#		print ('\tCritical threshold: ' + str(critical))
+		sys.exit(NAGIOS_UNKNOWN)
+
+	return return_value
+
+####################################################
+# Make the requested comparison to the JSON data   #
+####################################################
+def value_compare(compare_value, compare_type, compare_warning, compare_critical, operator):
+#	debug_output ('*************************************')
+	debug_output ('* Entered value_compare function    *')
+#	debug_output ('*************************************')
+
+	debug_output ('Compare value: ' + str(compare_value) + ' Type:' + str(type(compare_value)))
+	debug_output ('Critical value: ' + str(compare_critical) + ' Type:' + str(type(compare_critical)))
+	debug_output ('Warning value: ' + str(compare_warning) + ' Type:' + str(type(compare_warning)))
+	debug_output ('Comparison operator: ' + str(operator) + ' Type:' + str(type(operator)))
+
+	status_code = NAGIOS_OK
+	if operator == '==':
+		if compare_value == compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' == critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value == compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' == warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' == okay (default)')
+	elif operator == '!=':
+		if compare_value != compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' != critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value != compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' != warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' != okay (default)')
+	elif operator == '<':
+		if compare_value < compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' < critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value < compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' < warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' < okay (default)')
+	elif operator == '<=':
+		if compare_value <= compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' <= critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value <= compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' <= warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' <= okay (default)')
+	elif operator == '>':
+		if compare_value > compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' > critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value > compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' > warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' > okay (default)')
+	elif operator == '>=':
+		if compare_value >= compare_critical:
+			debug_output ('Value ' + str(compare_value) + ' >= critical ' + str(compare_critical))
+			status_code = NAGIOS_CRITICAL
+		elif compare_value >= compare_warning:
+			debug_output ('Value ' + str(compare_value) + ' >= warning ' + str(compare_warning))
+			status_code = NAGIOS_WARNING
+		else:
+			debug_output ('Value ' + str(compare_value) +  ' >= okay (default)')
+	else:
+		debug_output ('In default comparison -- invalid operator specified ' + operator)
+		status_code = NAGIOS_UNKNOWN
+
+	debug_output ('Status code: ' + str(status_code))
+
+	debug_output ('Exiting value_compare function')
+	debug_output ('')
+
+	return status_code
+
+
+####################################################
+# Make the requested comparison to the JSON data   #
+####################################################
+def check_json(json_data, attribute, compare_type, warning, critical, operator):
+#	debug_output ('**********************************')
+	debug_output ('* Entered check_json function    *')
+#	debug_output ('**********************************')
+	status_code = NAGIOS_OK
+#	print('Entered check_json')
+#	return
+
+#	Cast the values used in the comparisons to the correct
+#	data type before comparing the values
+	compare_warning = value_cast(compare_type, warning)
+	compare_critical = value_cast(compare_type, critical)
+	if operator in ['<', '<=']:
+		if compare_warning < compare_critical:
+			print ('Warning value ' + str(compare_warning) + ' is less than critical value ' + str(compare_critical))
+			sys.exit(NAGIOS_UNKNOWN)
+		else:
+			None
+	elif operator in ['>', '>=']:
+		if compare_warning > compare_critical:
+			print ('Warning value ' + str(compare_warning) + ' is greater than critical value ' + str(compare_critical))
+			sys.exit(NAGIOS_UNKNOWN)
+		else:
+			None
+	else:
+		None
+
+#	if operator is not None:
+#		try:
+#			debug_output ('Source data type: ' + str(type(json_data)))
+#			if compare_type == 'string':
+##				compare_value = str(json_data[attribute])
+#				compare_warning = str(warning)
+#				compare_critical = str(critical)
+#			elif compare_type == 'number':
+##				compare_value = float(json_data[attribute])
+#				compare_warning = float(warning)
+#				compare_critical = float(critical)
+#			else:
+#				print ('Invalid comparison data type')
+#				sys.exit(NAGIOS_UNKNOWN)
+#			if operator in ['<', '<=']:
+#				if compare_warning < compare_critical:
+#					print ('Warning value ' + str(compare_warning) + ' is less than critical value ' + str(compare_critical))
+#					sys.exit(NAGIOS_UNKNOWN)
+#				else:
+#					None
+#			elif operator in ['>', '>=']:
+#				if compare_warning > compare_critical:
+#					print ('Warning value ' + str(compare_warning) + ' is greater than critical value ' + str(compare_critical))
+#					sys.exit(NAGIOS_UNKNOWN)
+#				else:
+#					None
+#			else:
+#				None
+
+##		If an exception occurs, display an error message and exit
+#		except ValueError:
+#			print ('Unable to cast values to type %s in comparison data.' % str(compare_type))
+##			print ('\tJSON attribute: ' + str(json_data[attribute]))
+#			print ('\tWarning threshold: ' + str(warning))
+#			print ('\tCritical threshold: ' + str(critical))
+#			sys.exit(NAGIOS_UNKNOWN)
+	
+	debug_output ('Critical value: ' + str(compare_critical) + ' Type:' + str(type(compare_critical)))
+	debug_output ('Warning value: ' + str(compare_warning) + ' Type:' + str(type(compare_warning)))
+	debug_output ('Comparison operator: ' + str(operator) + ' Type:' + str(type(operator)))
+
+#	jsonpath_expr = jsonpath_rw.parse('$.' + attribute)
+	jsonpath_expr = parse('$.' + attribute)
+	query_data = jsonpath_expr.find(json_data)
+	debug_output ('query_data (type): ' + str(type(query_data)))
+	object_dump (query_data, 'Searched JSON data')
+
+#	Compare each entry found in the JSON to the supplied critical
+#	and warning values.  Capture the greatest value for the overall
+#	status code.
+	output_msg = ''
+	perfdata = ''
+	debug_output ('Output msg: ' + str(output_msg))
+
+#	TODO: Gather performance data is requested
+	for match in query_data:
+#		debug_output ('match (type): ' + str(type(match)))
+		debug_output ('Entry: ' + str(match.full_path) + ': ' + str(match.value))
+		if operator is not None:
+			debug_output ('Making comparison')
+			compare_value = value_cast(compare_type, match.value)
+			check_code = value_compare(compare_value, compare_type, compare_warning, compare_critical, operator)
+			if check_code > status_code:
+				status_code = check_code
+		else:
+			verbose_output ('No comparison operator provided to check_json_string')
+		output_msg = (output_msg + str(match.full_path) + ': (' + str(match.value) + ') ')
+		if opts.unit_of_measure is not None:
+			perfdata = perfdata + str(match.full_path) + '=' + str(match.value) + opts.unit_of_measure + ';;' + str(compare_warning) + ';' + str(compare_critical) + ' '
+			debug_output('Perfdata: ' + perfdata)
+		debug_output ('Output msg:')
+		debug_output (str(output_msg))
+
+	if status_code == NAGIOS_UNKNOWN:
+		output_msg = ('(Unknown) ' + output_msg)
+	elif status_code == NAGIOS_WARNING:
+		output_msg = ('(Warning) ' + output_msg)
+	elif status_code == NAGIOS_CRITICAL:
+		output_msg = ('(Critical) ' + output_msg)
+	else:
+		output_msg = ('(OK) ' + output_msg)
+
+	if opts.unit_of_measure is not None:
+		debug_output ('String length: ' + str(len(output_msg + '|' + perfdata)))
+		print (output_msg + '|' + perfdata)
+	else:
+		print (output_msg)
+	sys.exit(status_code)
+
+	debug_output ('Exiting check_json function')
+	debug_output ('')
+	return json_data
+
+
+if __name__ == "__main__":
+	opts = None
+	args = None
+	parser = None
+	parser_help = None
+
+	debug_output ('Entered main function')
+#	Bind in the parameter parser
+	debug_output ('Bind in the parameter parser')
+	parser = (optparse.OptionParser(
+					usage="%%prog %s" % usage,
+					version="%%prog %s" % version))
+
+	debug_output ('Settting up parser function')
+	define_opts(parser)
+	if debug_flag:
+		debug_output ('Print the command line help')
+		parser.print_help()
+		debug_output (' ')
+
+#	Parse the command line parameters into the opts and args arrays
+#	debug_output ('Parse the parameters')
+	(opts, args) = parser.parse_args()
+
+	if debug_flag:
+#		Print the input argument parameters
+		verbose_output ('Output the argument values')
+		print_args(args)
+#		Print the parsed input option parameters
+		verbose_output ('Output the parsed option parameters')
+		print_opts(opts)
+
+#	Validate input option parameters
+#	debug_output ('Validate the input parameter values')
+	validate_opts(opts)
+
+	if debug_flag or verbose_flag:
+#		Print the input argument parameters
+		verbose_output ('Output the validated argument values')
+		print_args(args)
+#		Print the validated option parameters
+		verbose_output ('Output the validated option parameters')
+		print_opts(opts)
+
+#	Construct the URL required to fetch the requested data
+	request_url = construct_url(opts)
+	debug_output ('Request URL to be read: %s' % request_url)#
+	debug_output ('')
+
+#	Construct the JSON document with the requested data
+	json_data = read_json(request_url, opts.timeout)
+
+#	Filter the constructed JSON document to just the subset
+#	of interest
+	if opts.filter is not None:
+		json_data = filter_json(json_data, opts.filter)
+		object_dump(json_data, 'Filtered JSON response')
+
+#	Perform the check comparison
+	check_json(json_data, opts.attribute, opts.compare_type, opts.warning, opts.critical, opts.operator)
+	debug_output ('Exiting main function')
