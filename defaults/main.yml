@@ -44,35 +44,6 @@ newrelic_infra_repo_repo_gpgcheck: True
 #  - nri-oracledb
 
 
-
-# New Relic Oracle DB plugin configuration
-nri_oracledb_package: nri-oracledb
-nri_oracledb_config_path: "{{ newrelic_infra_config_plugin }}"
-nri_oracledb_config_file: "{{ nri_oracledb_config_path }}/oracledb-config.yml"
-#nri_oracledb_config: []
-#nri_oracledb_config:
-#  - name: DB1
-#    command: all_data
-#    arguments:
-#      hostname: vap-scan-qts-01.vauto.int
-#      service_name: vapm1_app
-#      port: 1521
-#      username: newrelic_user
-#      password: NewRelic_User_DB_Password
-#      is_sys_dba: False
-#      is_sys_oper: False
-#      extended_metrics: True
-#      tablespaces: []
-#    labels:
-#      data_center: Laptop VM
-#      environment: Individual
-#      machine_type: Virtual Machine
-#      team: David Rotthoff
-#      friendly_name: "{{ friendly_name | default('Unknown') }}"
-#      physical_name: "{{ physical_name | default('Unknown') }}"
-#      environment_state: Active
-
-
 ## New Relic Elastic Search plugin configuration
 nri_elasticsearch_package: nri-elasticsearch
 nri_elasticsearch_config_path: "{{ newrelic_infra_config_plugin }}"
@@ -110,8 +81,20 @@ nri_nagios_package: nri-nagios
 #  - nagios-plugins-oracle
 nri_nagios_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_nagios_config_file: "{{ nri_nagios_config_path }}/nagios-config.yml"
-nri_nagios_check_ping_cmd: /usr/lib64/nagios/plugins/check_ping
-nri_nagios_check_tcp_cmd: /usr/lib64/nagios/plugins/check_tcp
+nri_nagios_check_default_path: "/usr/lib64/nagios/plugins"
+nri_nagios_check_local_path: "/usr/local/lib64/nagios"
+nri_nagios_check_local_owner: root
+nri_nagios_check_local_group: root
+nri_nagios_check_local_mode: 755
+nri_nagios_check_local_src: files
+nri_nagios_check_ping_cmd: "{{ nri_nagios_check_default_path }}/check_ping"
+nri_nagios_check_tcp_cmd: "{{ nri_nagios_check_default_path }}/check_tcp"
+nri_nagios_check_local: []
+#nri_nagios_check_local:
+#  - check_oracle
+#  - check_linux_bonding_vauto
+#  - check_linux_metrics_vauto
+
 nri_nagios_config: []
 #nri_nagios_config:
 #  - name: nagios-oracle-db-ping
@@ -139,29 +122,33 @@ nri_nagios_config: []
 #          hostname: pdb2034
 #          target_host: pdb2034.vauto.int
 #          target_type: Host IP
-#  - name: nagios-oracle-db-port-1521
-#    command: metrics
-#    service_checks_config: "{{ nri_nagios_config_path }}/nagios-oracle-db-port-1521.yml"
-#    service_checks_labels:
-#       environment: PROD
-#       data_center: SDC
-#       application: Oracle
-#       source_host: "{{ ansible_fqdn }}"
-#       check_type: PORT
-#       check_port: 1521
-#       team: DBA
-#    service_checks:
-#      - name: pdb2032_port_1521
-#        command: ["{{ nri_nagios_check_tcp_cmd }}", "-t", "5", "-H", "pdb2032.vauto.int", "-p", "1521"]
-#        parse_output: true
-#        labels:
-#          hostname: pdb2032
-#          target_host: pdb2032.vauto.int
-#          target_type: Host IP
-#      - name: pdb2034_port_1521
-#        command: ["{{ nri_nagios_check_tcp_cmd }}", "-t", "5", "-H", "pdb2034.vauto.int", "-p", "1521"]
-#        parse_output: true
-#        labels:
-#          hostname: pdb2034
-#          target_host: pdb2034.vauto.int
-#          target_type: Host IP
+
+
+# New Relic Oracle DB plugin configuration
+nri_oracledb_package: nri-oracledb
+nri_oracledb_config_path: "{{ newrelic_infra_config_plugin }}"
+nri_oracledb_config_file: "{{ nri_oracledb_config_path }}/oracledb-config.yml"
+#nri_oracledb_config: []
+#nri_oracledb_config:
+#  - name: DB1
+#    command: all_data
+#    arguments:
+#      hostname: vap-scan-qts-01.vauto.int
+#      service_name: vapm1_app
+#      port: 1521
+#      username: newrelic_user
+#      password: NewRelic_User_DB_Password
+#      is_sys_dba: False
+#      is_sys_oper: False
+#      extended_metrics: True
+#      tablespaces: []
+#    labels:
+#      data_center: Laptop VM
+#      environment: Individual
+#      machine_type: Virtual Machine
+#      team: David Rotthoff
+#      friendly_name: "{{ friendly_name | default('Unknown') }}"
+#      physical_name: "{{ physical_name | default('Unknown') }}"
+#      environment_state: Active
+
+
