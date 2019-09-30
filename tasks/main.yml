@@ -58,3 +58,4 @@
     name: "{{ newrelic_infra_service_name }}"
     state: "{{ newrelic_infra_service_state }}"
     enabled: "{{ newrelic_infra_service_enabled }}"
+

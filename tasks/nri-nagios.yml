@@ -17,22 +17,15 @@
     state: "{{ newrelic_infra_state }}"
   notify:
     - Restart New Relic Agent
-  when: nri_nagios_supplemental_packages is defined
+  when:
+    - nri_nagios_supplemental_packages is defined
   ignore_errors: "{{ ansible_check_mode }}"
-
-- name: Ensure the default local Nagios checks directory exists
-  file:
-    path: "{{ nri_nagios_check_path_local }}"
-    state: directory
-    owner: "{{ nri_nagios_check_local_owner }}"
-    group: "{{ nri_nagios_check_local_group }}"
-    mode: "{{ nri_nagios_check_local_mode }}"
 
 - name: Set up local Nagios checks on the New Relic server
   block:
     - name: Ensure the local Nagios checks directory exists
       file:
-        path: "{{ nri_nagios_check_path_local }}"
+        path: "{{ nri_nagios_check_local_path }}"
         state: directory
         owner: "{{ nri_nagios_check_local_owner }}"
         group: "{{ nri_nagios_check_local_group }}"
@@ -40,15 +33,17 @@
 
     - name: Copy the local check to the New Relic server
       copy:
-        src: "{{ nri_nagios_check_local_src }}/{{ check_item.name }}"
-        path: "{{ nri_nagios_check_path_local }}/{{ check_item.name }}"
+        src: "{{ nri_nagios_check_local_src }}/{{ check_item }}"
+        dest: "{{ nri_nagios_check_local_path }}/{{ check_item }}"
         owner: "{{ nri_nagios_check_local_owner }}"
         group: "{{ nri_nagios_check_local_group }}"
         mode: "{{ nri_nagios_check_local_mode }}"
       loop: "{{ nri_nagios_check_local }}"
       loop_control:
         loop_var: check_item
-  when: nri_nagios_check_local is defined and nri_nagios_check_local | length > 0
+  when:
+    - nri_nagios_check_local is defined
+    - nri_nagios_check_local | length > 0
   
 - name: Configure the New Relic Infrastructure Nagios plugin
   template:
@@ -56,7 +51,8 @@
     dest: "{{ nri_nagios_config_file }}"
   notify:
     - Restart New Relic Agent
-  when: nri_nagios_config is defined
+  when:
+    - nri_nagios_config is defined
 
 - name: Configure the New Relic Infrastructure Nagios plugin service checks
   template:
@@ -67,4 +63,6 @@
     loop_var: check_item
   notify:
     - Restart New Relic Agent
-  when: nri_nagios_config is defined
+  when:
+    - nri_nagios_config is defined
+
