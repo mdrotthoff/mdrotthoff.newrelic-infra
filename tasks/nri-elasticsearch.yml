@@ -3,10 +3,10 @@
 # $Date$
 # $Source$
 
-- name: Display the value of the item variable
-  debug:
-    var: item
-#    verbosity: "{{ debug_level | default(1) }}"
+#- name: Display the value of the item variable
+#  debug:
+#    var: item
+##    verbosity: "{{ debug_level | default(1) }}"
 
 - name: Install the New Relic Elasticsearch plugin
   package:
@@ -20,6 +20,7 @@
   template:
     src: nri-elasticsearch.yml.j2
     dest: "{{ nri_elasticsearch_config_file }}"
+    mode: 0600
   notify:
     - Restart New Relic Agent
   when:

@@ -20,6 +20,7 @@
   template:
     src: nri-oracledb.yml.j2
     dest: "{{ nri_oracledb_config_file }}"
+    mode: 0600
   notify:
     - Restart New Relic Agent
   when:

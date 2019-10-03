@@ -49,6 +49,7 @@
   template:
     src: nri-nagios.yml.j2
     dest: "{{ nri_nagios_config_file }}"
+    mode: 0600
   notify:
     - Restart New Relic Agent
   when:
@@ -58,6 +59,7 @@
   template:
     src: nri-nagios-service-checks.yml.j2
     dest: "{{ check_item.service_checks_config }}"
+    mode: 0600
   loop: "{{ nri_nagios_config }}"
   loop_control:
     loop_var: check_item
