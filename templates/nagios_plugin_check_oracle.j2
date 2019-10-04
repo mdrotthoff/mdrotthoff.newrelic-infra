@@ -1,10 +1,20 @@
-#!/bin/sh
+#!/bin/env bash
+
+# {{ ansible_managed }}
+
 #
 # latigid010@yahoo.com
 # 01/06/2000
 #
 #  This Nagios plugin was created to check Oracle status
 #
+
+{% if oracle_client_oracle_home is defined %}
+export ORACLE_HOME="{{ oracle_client_oracle_home }}"
+{% endif %}
+{% if oracle_client_tns_admin is defined %}
+export TNS_ADMIN="{{ oracle_client_tns_admin }}"
+{% endif %}
 
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 export PATH
@@ -22,6 +32,7 @@ STATE_UNKNOWN=3
 if [ -z "${ORACLE_HOME}" ] && [ -f /etc/profile.d/oracle_client.sh ] ; then
   . /etc/profile.d/oracle-client.sh
 fi
+
 
 print_usage() {
   echo "Usage:"
@@ -137,6 +148,7 @@ if [ "$cmd" != "--db" ]; then
         exit "$STATE_UNKNOWN"
     fi
 fi
+
 PATH=$PATH:$ORACLE_HOME/bin
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib
 export ORACLE_HOME PATH LD_LIBRARY_PATH

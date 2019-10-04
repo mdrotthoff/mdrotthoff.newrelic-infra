@@ -29,8 +29,8 @@
 
 - name: Install the New Relic Infrastructure Agent package
   package:
-    name: "{{ newrelic_infra_package }}"
-    state: "{{ newrelic_infra_state }}"
+    name: "{{ newrelic_infra_package_name }}"
+    state: "{{ newrelic_infra_package_state }}"
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"

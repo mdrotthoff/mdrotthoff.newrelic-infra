@@ -1,7 +1,7 @@
 ---
 #newrelic_infra_config_license_key: YOUR_LICENSE_KEY
-newrelic_infra_state: present
-newrelic_infra_package: newrelic-infra
+newrelic_infra_package_state: present
+newrelic_infra_package_name: newrelic-infra
 newrelic_infra_service_name: newrelic-infra
 newrelic_infra_service_enabled: true
 newrelic_infra_service_state: started
@@ -45,7 +45,8 @@ newrelic_infra_repo_repo_gpgcheck: True
 
 
 ## New Relic Elastic Search plugin configuration
-nri_elasticsearch_package: nri-elasticsearch
+nri_elasticsearch_package_name: nri-elasticsearch
+nri_elasticsearch_package_state: "{{ newrelic_infra_package_state }}"
 nri_elasticsearch_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearch-config.yml"
 #nri_elasticsearch_config: []
@@ -73,7 +74,8 @@ nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearc
 #
 
 # New Relic Nagios plugin configuration
-nri_nagios_package: nri-nagios
+nri_nagios_package_name: nri-nagios
+nri_nagios_package_state: "{{ newrelic_infra_package_state }}"
 #nri_nagios_supplemental_packages: []
 #nri_nagios_supplemental_packages:
 #  - nagios-plugins-ping
@@ -85,7 +87,7 @@ nri_nagios_check_default_path: "/usr/lib64/nagios/plugins"
 nri_nagios_check_local_path: "/usr/local/lib64/nagios"
 nri_nagios_check_local_owner: root
 nri_nagios_check_local_group: root
-nri_nagios_check_local_mode: 755
+nri_nagios_check_local_mode: 0755
 nri_nagios_check_local_src: files
 nri_nagios_check_ping_cmd: "{{ nri_nagios_check_default_path }}/check_ping"
 nri_nagios_check_tcp_cmd: "{{ nri_nagios_check_default_path }}/check_tcp"
@@ -125,7 +127,8 @@ nri_nagios_config: []
 
 
 # New Relic Oracle DB plugin configuration
-nri_oracledb_package: nri-oracledb
+nri_oracledb_package_name: nri-oracledb
+nri_oracledb_package_state: "{{ newrelic_infra_package_state }}"
 nri_oracledb_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_oracledb_config_file: "{{ nri_oracledb_config_path }}/oracledb-config.yml"
 #nri_oracledb_config: []

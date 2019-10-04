@@ -10,8 +10,8 @@
 
 - name: Install the New Relic Elasticsearch plugin
   package:
-    name: "{{ nri_elasticsearch_package }}"
-    state: "{{ newrelic_infra_state }}"
+    name: "{{ nri_elasticsearch_package_name }}"
+    state: "{{ nri_elasticsearch_package_state }}"
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"

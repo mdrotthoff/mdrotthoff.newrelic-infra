@@ -5,8 +5,8 @@
 
 - name: Install the New Relic Nagios plugin
   package:
-    name: "{{ nri_nagios_package }}"
-    state: "{{ newrelic_infra_state }}"
+    name: "{{ nri_nagios_package_name }}"
+    state: "{{ nri_nagios_package_state }}"
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
@@ -32,12 +32,7 @@
         mode: "{{ nri_nagios_check_local_mode }}"
 
     - name: Copy the local check to the New Relic server
-      copy:
-        src: "{{ nri_nagios_check_local_src }}/{{ check_item }}"
-        dest: "{{ nri_nagios_check_local_path }}/{{ check_item }}"
-        owner: "{{ nri_nagios_check_local_owner }}"
-        group: "{{ nri_nagios_check_local_group }}"
-        mode: "{{ nri_nagios_check_local_mode }}"
+      include_tasks: nri-nagios-local-check.yml
       loop: "{{ nri_nagios_check_local }}"
       loop_control:
         loop_var: check_item

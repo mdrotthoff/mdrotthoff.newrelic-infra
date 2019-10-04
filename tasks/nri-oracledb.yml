@@ -5,8 +5,8 @@
 
 - name: Install the New Relic Oracle DB plugin
   package:
-    name: "{{ nri_oracledb_package }}"
-    state: "{{ newrelic_infra_state }}"
+    name: "{{ nri_oracledb_package_name }}"
+    state: "{{ nri_oracledb_package_state }}"
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
