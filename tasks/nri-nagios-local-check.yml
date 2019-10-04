@@ -7,7 +7,7 @@
   block:
     - name: Build the local check on the New Relic server from a template
       template:
-        src: "{{ nri_nagios_check_local_src }}/nagios_plugin_{{ check_item }}.j2"
+        src: "nagios_plugin_{{ check_item }}.j2"
         dest: "{{ nri_nagios_check_local_path }}/{{ check_item }}"
         owner: "{{ nri_nagios_check_local_owner }}"
         group: "{{ nri_nagios_check_local_group }}"
