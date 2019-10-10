@@ -24,6 +24,8 @@ newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/
 newrelic_infra_repo_gpgkey: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
 newrelic_infra_repo_gpgcheck: True
 newrelic_infra_repo_repo_gpgcheck: True
+newrelic_infra_repo_enabled: True
+
 #newrelic_infra_repo_proxy: "<Proxy server to use for the Yum repository>"
 
 ## Custom attributes to be added to the New Relic configuration file
