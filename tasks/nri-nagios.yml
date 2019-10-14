@@ -14,11 +14,12 @@
 - name: Install the supplemental packages required by the New Relic Nagios plugin
   package:
     name: "{{ nri_nagios_supplemental_packages }}"
-    state: "{{ newrelic_infra_state }}"
+    state: "{{ nri_nagios_package_state }}"
   notify:
     - Restart New Relic Agent
   when:
-    - nri_nagios_supplemental_packages is defined
+    - nri_nagios_supplemental_packages is defined 
+    - not (nri_nagios_package_state in [ "absent", "removed" ])
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Set up local Nagios checks on the New Relic server

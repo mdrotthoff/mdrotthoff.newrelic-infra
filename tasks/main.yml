@@ -23,10 +23,15 @@
     proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
     enabled: "{{ newrelic_infra_repo_enabled | default(True) }}"
 
+#- name: Install the RPM GPG key
+#  rpm_key:
+#    key: "{{ newrelic_infra_repo_gpgkey }}"
+#    state: "{{ newrelic_infra_package_state }}"
+
 - name: Install the RPM GPG key
   rpm_key:
     key: "{{ newrelic_infra_repo_gpgkey }}"
-    state: present
+    state: "{{ 'absent' if (newrelic_infra_package_state in ['absent', 'removed']) else 'present' }}"
 
 - name: Install the New Relic Infrastructure Agent package
   yum:
