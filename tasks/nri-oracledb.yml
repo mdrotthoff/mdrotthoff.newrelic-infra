@@ -11,6 +11,17 @@
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install the supplemental packages required by the New Relic OracleDB plugin
+  package:
+    name: "{{ nri_oracledb_supplemental_packages }}"
+    state: "{{ nri_oracledb_package_state }}"
+  notify:
+    - Restart New Relic Agent
+  when:
+    - nri_oracledb_supplemental_packages is defined 
+    - not (nri_oracledb_package_state in [ "absent", "removed" ])
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Dump variable nri_oracledb_config
   debug:
     var: nri_oracledb_config

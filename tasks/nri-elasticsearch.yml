@@ -16,6 +16,17 @@
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install the supplemental packages required by the New Relic Elasticsearch plugin
+  package:
+    name: "{{ nri_elasticsearch_supplemental_packages }}"
+    state: "{{ nri_elasticsearch_package_state }}"
+  notify:
+    - Restart New Relic Agent
+  when:
+    - nri_elasticsearch_supplemental_packages is defined 
+    - not (nri_elasticsearch_package_state in [ "absent", "removed" ])
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Configure the New Relic Infrastructure Elasticsearch plugin
   template:
     src: nri-elasticsearch.yml.j2
