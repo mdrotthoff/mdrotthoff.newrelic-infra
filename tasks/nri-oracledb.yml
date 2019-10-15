@@ -22,11 +22,6 @@
     - not (nri_oracledb_package_state in [ "absent", "removed" ])
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Dump variable nri_oracledb_config
-  debug:
-    var: nri_oracledb_config
-    verbosity: "{{ debug_level | default(1) }}"
-
 - name: Configure the New Relic Oracle DB plugin
   template:
     src: nri-oracledb.yml.j2
