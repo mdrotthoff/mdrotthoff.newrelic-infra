@@ -20,7 +20,7 @@ newrelic_infra_config_log_to_stdout: False
 #  - lo
 
 # Details required to create a Yum configuration for the New Relic repository
-newrelic_infra_repo_baseurl: https://download.newrelic.com/infrastructure_agent/linux/yum/el/{{ distribution_major_version }}/x86_64
+newrelic_infra_repo_baseurl: "https://download.newrelic.com/infrastructure_agent/linux/yum/el/{{ ansible_distribution_major_version }}/x86_64"
 newrelic_infra_repo_gpgkey: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
 newrelic_infra_repo_gpgcheck: True
 newrelic_infra_repo_repo_gpgcheck: True
