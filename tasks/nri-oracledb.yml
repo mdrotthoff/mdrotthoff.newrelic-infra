@@ -4,15 +4,16 @@
 # $Source$
 
 - name: Install the New Relic Oracle DB plugin
-  package:
+  yum:
     name: "{{ nri_oracledb_package_name }}"
     state: "{{ nri_oracledb_package_state }}"
+    enablerepo: newrelic_infra-agent
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install the supplemental packages required by the New Relic OracleDB plugin
-  package:
+  yum:
     name: "{{ nri_oracledb_supplemental_packages }}"
     state: "{{ nri_oracledb_package_state }}"
   notify:
