@@ -9,15 +9,16 @@
 ##    verbosity: "{{ debug_level | default(1) }}"
 
 - name: Install the New Relic Elasticsearch plugin
-  package:
+  yum:
     name: "{{ nri_elasticsearch_package_name }}"
     state: "{{ nri_elasticsearch_package_state }}"
+    enablerepo: newrelic_infra-agent
   notify:
     - Restart New Relic Agent
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install the supplemental packages required by the New Relic Elasticsearch plugin
-  package:
+  yum:
     name: "{{ nri_elasticsearch_supplemental_packages }}"
     state: "{{ nri_elasticsearch_package_state }}"
   notify:
