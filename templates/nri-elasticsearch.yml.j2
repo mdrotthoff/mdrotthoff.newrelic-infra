@@ -1,3 +1,5 @@
+integration_name: com.newrelic.elasticsearch
+
 instances:
 {% for config in nri_elasticsearch_config %}
   - name: {{ config.name }}
