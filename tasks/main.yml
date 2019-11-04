@@ -12,6 +12,13 @@
   include_role:
     name: mdrotthoff.ansible-debug
 
+#- name: Build the proxy URI required for the Yum repository if appropriate
+#  set_fact:
+#    newrelic_infra_repo_proxy: "{{ newrelic_infra_proxy_server }}:{{ newrelic_infra_proxy_port }}"
+#  when:
+#    - newrelic_infra_proxy_server is defined
+#    - newrelic_infra_proxy_port is defined
+
 - name: Configuration for the New Relic Yum repository
   yum_repository:
     name: newrelic_infra-agent
@@ -23,15 +30,22 @@
     proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
     enabled: "{{ newrelic_infra_repo_enabled | default(True) }}"
 
-#- name: Install the RPM GPG key
-#  rpm_key:
-#    key: "{{ newrelic_infra_repo_gpgkey }}"
-#    state: "{{ newrelic_infra_package_state }}"
+- name: Copy the RPM GPG key locally for installation
+  get_url:
+    dest: /tmp/newrelic-infra.gpg
+    src: "{{ newrelic_infra_repo_gpgkey }}"
+  environment:
+    https_proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
 
 - name: Install the RPM GPG key
   rpm_key:
-    key: "{{ newrelic_infra_repo_gpgkey }}"
+    key: /tmp/newrelic-infra.gpg
     state: "{{ 'absent' if (newrelic_infra_package_state in ['absent', 'removed']) else 'present' }}"
+
+#- name: Install the RPM GPG key
+#  rpm_key:
+#    key: "{{ newrelic_infra_repo_gpgkey }}"
+#    state: "{{ 'absent' if (newrelic_infra_package_state in ['absent', 'removed']) else 'present' }}"
 
 - name: Install the New Relic Infrastructure Agent package
   yum:
