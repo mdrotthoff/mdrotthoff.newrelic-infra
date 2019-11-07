@@ -30,17 +30,38 @@
     proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
     enabled: "{{ newrelic_infra_repo_enabled | default(True) }}"
 
-- name: Copy the RPM GPG key locally for installation
+- name: Copy the RPM GPG key locally for installation via proxy
   get_url:
+    url: "{{ newrelic_infra_repo_gpgkey }}"
     dest: /tmp/newrelic-infra.gpg
-    src: "{{ newrelic_infra_repo_gpgkey }}"
+    validate_certs: False
+  changed_when: False
   environment:
+    http_proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
     https_proxy: "{{ newrelic_infra_repo_proxy | default(omit) }}"
+  when:
+    - newrelic_infra_repo_proxy is defined
+
+- name: Copy the RPM GPG key locally for installation w/o proxy
+  get_url:
+    url: "{{ newrelic_infra_repo_gpgkey }}"
+    dest: /tmp/newrelic-infra.gpg
+    validate_certs: False
+  changed_when: False
+  when:
+    - newrelic_infra_repo_proxy is not defined
 
 - name: Install the RPM GPG key
   rpm_key:
     key: /tmp/newrelic-infra.gpg
     state: "{{ 'absent' if (newrelic_infra_package_state in ['absent', 'removed']) else 'present' }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Remove the downloaded RPM GPG key
+  file:
+    path: /tmp/newrelic-infra.gpg
+    state: absent
+  changed_when: False
 
 #- name: Install the RPM GPG key
 #  rpm_key:
