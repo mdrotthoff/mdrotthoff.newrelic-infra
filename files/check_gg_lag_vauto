@@ -46,7 +46,6 @@ exit_with_error() {
 
 
 # Process the supplied arguments
-# while [ ! -z "${1}" ]; do
 while [ -n "${1}" ]; do
   case ${1} in
        -d)          shift; ORACLE_DBNAME="${1}" ;;
