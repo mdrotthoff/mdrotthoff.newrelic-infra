@@ -29,6 +29,7 @@ show_help() {
 
 # Get the lag report for the specified GG process
 get_gg_lag() {
+echo "Getting lag data"
 ./ggsci <<ScriptEOF
 lag ${GG_NAME}
 quit
@@ -85,6 +86,8 @@ ORACLE_HOME=$(grep "${ORACLE_DBNAME}:" /etc/oratab | cut -f2 -d:)
 LD_LIBRARY_PATH="${ORACLE_HOME}/lib:${LD_LIBRARY_PATH}"
 export ORACLE_HOME
 export LD_LIBRARY_PATH
+# echo "Oracle home: ${ORACLE_HOME}"
+# echo "LD library path: ${LD_LIBRARY_PATH}"
 if [[ -z "${ORACLE_HOME}" ]] ; then
   echo "Oracle home for database ${ORACLE_DBNAME} not found in /etc/oratab"
   exit ${E_UNKNOWN}
@@ -95,15 +98,26 @@ if ! [[ -d "${ORACLE_HOME}" ]] ; then
 fi
 
 # Find the PID of the running Golden Gate process
+# echo "GG PID: ${GG_PID}"
+# ps axf | grep "${GG_NAME}" | grep "PARAMFILE"
+# GG_PID_TEXT=$(ps axf | grep "${GG_NAME}" | grep "PARAMFILE")
+# echo "PID text: ${GG_PID_TEXT}"
+# GG_PID=$(echo ${GG_PID_TEXT} | cut -f1 -d' ')
+# ps axf | grep "${GG_NAME}" | grep "PARAMFILE" | awk '{ print $1 }'
 GG_PID=$(ps axf | grep "${GG_NAME}" | grep "PARAMFILE" | awk '{ print $1 }')
+# echo "GG PID: ${GG_PID}"
+# echo "End GG PID"
 if [[ -z "${GG_PID}" ]] ; then
   echo "Golden Gate process not running"
   exit ${E_UNKNOWN}
 fi
 
 # Find the home of the executing Golden Gate process
+# echo "GG PID: ${GG_PID}"
+# readlink -f "/proc/${GG_PID}/cwd"
 GG_HOME=$(readlink -f "/proc/${GG_PID}/cwd")
 export GG_HOME
+# echo "GG home: ${GG_HOME}"
 if ! [[ -d "${GG_HOME}" ]] ; then
   echo "Golden Gate home directory ${GG_HOME} not found"
   exit ${E_UNKNOWN}
@@ -111,7 +125,13 @@ fi
 
 # Get the lag for the GG process (time & increment)
 cd "${GG_HOME}" || exit_with_error "Golden Gate home directory ${GG_HOME} not found"
+# echo "Starting lag check"
+# echo "pwd: ${PWD}"
+# get_gg_lag
+# echo "Ending lag check"
+
 while read -r l_line ; do
+#  echo "Line: ${l_line}"
   if [[ $(echo "${l_line}" | grep -c "Invalid command.") -gt 0 ]] ; then
     echo "GG: ${GG_NAME} Output: ${l_line}"
     exit ${E_UNKNOWN}
@@ -131,6 +151,8 @@ while read -r l_line ; do
 done < <(get_gg_lag | grep -E 'Invalid command|record lag|No records|Lag unknown')
 
 # Calculate the lag as seconds
+# echo "lag time: ${lag_time}"
+# echo "lag increment: ${lag_time_inc}"
 case "${lag_time_inc}" in
      seconds.) calc_lag_time=${lag_time//,} ;;
      minutes.) calc_lag_time=$((${lag_time//,} * 60)) ;;
