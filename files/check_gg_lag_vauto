@@ -1,7 +1,9 @@
 #! /bin/env bash
+# /u021/app/oracle/product/jdk1.8.0_231/jre/lib/amd64/server
 
 ORACLE_DBNAME=
 GG_NAME=
+LD_ADDITION=
 CRITICAL=1800
 WARNING=600
 
@@ -20,6 +22,7 @@ show_help() {
   echo
   echo "  -d ORACLE_DBNAME  Oracle database name (not instance name)"
   echo "  -g GG_NAME        Golden Gate process name"
+  echo "  -l LD_ADDITION    Additional paths for use in LD_LIBRARY_PATH"
   echo "  -w LAG_TIME       Warning lag time in seconds (default 600 seconds)"
   echo "  -c LAG_TIME       Critical lag time in seconds (default 1800 seconds)"
   echo
@@ -50,6 +53,7 @@ while [ -n "${1}" ]; do
   case ${1} in
        -d)          shift; ORACLE_DBNAME="${1}" ;;
        -g)          shift; GG_NAME="${1}" ;;
+       -l)          shift; LD_ADDITION="${1}" ;;
        -c)          shift; CRITICAL="${1}" ;;
        -w)          shift; WARNING="${1}" ;;
        -h)          show_help
@@ -81,9 +85,7 @@ fi
 
 # Set the Oracle home for the database from /etc/oratab
 ORACLE_HOME=$(grep "${ORACLE_DBNAME}:" /etc/oratab | cut -f2 -d:)
-LD_LIBRARY_PATH="${ORACLE_HOME}/lib:${LD_LIBRARY_PATH}"
 export ORACLE_HOME
-export LD_LIBRARY_PATH
 if [[ -z "${ORACLE_HOME}" ]] ; then
   echo "Oracle home for database ${ORACLE_DBNAME} not found in /etc/oratab"
   exit ${E_UNKNOWN}
@@ -107,6 +109,13 @@ if ! [[ -d "${GG_HOME}" ]] ; then
   echo "Golden Gate home directory ${GG_HOME} not found"
   exit ${E_UNKNOWN}
 fi
+
+# Set the library path variables
+if [[ -n "${LD_ADDITION}" ]] ; then
+	LD_LIBRARY_PATH="${LD_ADDITION}:${LD_LIBRARY_PATH}"
+fi
+LD_LIBRARY_PATH="${ORACLE_HOME}/lib:${GG_HOME}:${LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH
 
 # Get the lag for the GG process (time & increment)
 cd "${GG_HOME}" || exit_with_error "Golden Gate home directory ${GG_HOME} not found"
