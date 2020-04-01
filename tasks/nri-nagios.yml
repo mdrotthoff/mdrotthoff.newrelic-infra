@@ -66,9 +66,8 @@
     - nri_nagios_config is defined
 
 - name: Configure the default definition interval
-  lineinfile:
+  replace:
     path: "{{ nri_nagios_definition_file }}"
-    state: present
     regexp: "interval: (\\d+)"
     replace: "interval: {{ nri_nagios_definition_interval }}"
   notify:

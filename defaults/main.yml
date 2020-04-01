@@ -81,7 +81,7 @@ nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearc
 nri_nagios_package_name: nri-nagios
 nri_nagios_package_state: "{{ newrelic_infra_package_state }}"
 nri_nagios_definition_file: "{{ newrelic_infra_config_definition_home }}/nagios-definition.yml"
-nri_nagios_definition_interval: {{ newrelic_infra_config_definition_interval }}
+nri_nagios_definition_interval: "{{ newrelic_infra_config_definition_interval }}"
 #nri_nagios_supplemental_packages: []
 #nri_nagios_supplemental_packages:
 #  - nagios-plugins-ping
