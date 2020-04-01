@@ -65,3 +65,15 @@
   when:
     - nri_nagios_config is defined
 
+- name: Configure the default definition interval
+  lineinfile:
+    path: "{{ nri_nagios_definition_file }}"
+    state: present
+    regexp: "interval: (\\d+)"
+    replace: "interval: {{ nri_nagios_definition_interval }}"
+  notify:
+    - Restart New Relic Agent
+  when:
+    - nri_nagios_definition_file is defined
+    - nri_nagios_definition_interval is defined
+

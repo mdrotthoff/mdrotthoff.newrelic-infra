@@ -14,6 +14,8 @@ newrelic_infra_config_event_queue_depth: 5000
 newrelic_infra_config_log_path: /var/log/newrelic-infra
 newrelic_infra_config_log_file: nr-infra.log
 newrelic_infra_config_log_to_stdout: False
+newrelic_infra_config_definition_home: "/var/db/newrelic-infra/newrelic-integrations"
+newrelic_infra_config_definition_interval: 60
 
 ## Network interfaces to be ignored by the New Relic Infrastructure server
 #newrelic_infra_config_net_iface_filter:
@@ -78,6 +80,8 @@ nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearc
 # New Relic Nagios plugin configuration
 nri_nagios_package_name: nri-nagios
 nri_nagios_package_state: "{{ newrelic_infra_package_state }}"
+nri_nagios_definition_file: "{{ newrelic_infra_config_definition_home }}/nagios-definition.yml"
+nri_nagios_definition_interval: {{ newrelic_infra_config_definition_interval }}
 #nri_nagios_supplemental_packages: []
 #nri_nagios_supplemental_packages:
 #  - nagios-plugins-ping
