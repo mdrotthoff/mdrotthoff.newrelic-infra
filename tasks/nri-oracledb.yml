@@ -33,3 +33,15 @@
   when:
     - nri_oracledb_config is defined
     - nri_oracledb_config | length > 0
+    
+
+- name: Configure the default definition interval
+  replace:
+    path: "{{ nri_oracledb_definition_file }}"
+    regexp: "interval: (\\d+)"
+    replace: "interval: {{ nri_oracledb_definition_interval }}"
+  notify:
+    - Restart New Relic Agent
+  when:
+    - nri_oracledb_definition_file is defined
+    - nri_oracledb_definition_interval is defined

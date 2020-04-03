@@ -38,3 +38,14 @@
   when:
     - nri_elasticsearch_config is defined
     - nri_elasticsearch_config | length > 0
+
+- name: Configure the default definition interval
+  replace:
+    path: "{{ nri_elasticsearch_definition_file }}"
+    regexp: "interval: (\\d+)"
+    replace: "interval: {{ nri_elasticsearch_definition_interval }}"
+  notify:
+    - Restart New Relic Agent
+  when:
+    - nri_elasticsearch_definition_file is defined
+    - nri_elasticsearch_definition_interval is defined

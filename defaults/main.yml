@@ -53,6 +53,8 @@ nri_elasticsearch_package_name: nri-elasticsearch
 nri_elasticsearch_package_state: "{{ newrelic_infra_package_state }}"
 nri_elasticsearch_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_elasticsearch_config_file: "{{ nri_elasticsearch_config_path }}/elasticsearch-config.yml"
+nri_elasticsearch_definition_file: "{{ newrelic_infra_config_definition_home }}/nagios-definition.yml"
+nri_elasticsearch_definition_interval: "{{ newrelic_infra_config_definition_interval }}"
 #nri_elasticsearch_config: []
 #nri_elasticsearch_config:
 #  - name: va-sdc-cluster
@@ -137,6 +139,8 @@ nri_oracledb_package_name: nri-oracledb
 nri_oracledb_package_state: "{{ newrelic_infra_package_state }}"
 nri_oracledb_config_path: "{{ newrelic_infra_config_plugin }}"
 nri_oracledb_config_file: "{{ nri_oracledb_config_path }}/oracledb-config.yml"
+nri_oracledb_definition_file: "{{ newrelic_infra_config_definition_home }}/oracledb-definition.yml"
+nri_oracledb_definition_interval: "{{ newrelic_infra_config_definition_interval }}"
 #nri_oracledb_config: []
 #nri_oracledb_config:
 #  - name: DB1
