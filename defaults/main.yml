@@ -15,7 +15,7 @@ newrelic_infra_config_log_path: /var/log/newrelic-infra
 newrelic_infra_config_log_file: nr-infra.log
 newrelic_infra_config_log_to_stdout: False
 newrelic_infra_config_definition_home: "/var/db/newrelic-infra/newrelic-integrations"
-newrelic_infra_config_definition_interval: 60
+newrelic_infra_config_definition_interval: 55
 
 ## Network interfaces to be ignored by the New Relic Infrastructure server
 #newrelic_infra_config_net_iface_filter:
