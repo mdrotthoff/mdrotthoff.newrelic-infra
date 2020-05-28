@@ -75,4 +75,5 @@
   when:
     - nri_nagios_definition_file is defined
     - nri_nagios_definition_interval is defined
+  ignore_errors: "{{ ansible_check_mode }}"
 
