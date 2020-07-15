@@ -32,7 +32,7 @@ show_help() {
 
 # Get the lag report for the specified GG process
 get_gg_lag() {
-./ggsci <<ScriptEOF
+runuser -p -u oracle ./ggsci <<ScriptEOF
 lag ${GG_NAME}
 quit
 ScriptEOF
