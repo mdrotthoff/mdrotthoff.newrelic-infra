@@ -14,6 +14,8 @@ export ORACLE_HOME="{{ oracle_client_oracle_home }}"
 {% endif %}
 {% if oracle_client_tns_admin is defined %}
 export TNS_ADMIN="{{ oracle_client_tns_admin }}"
+{% else %}
+export TNS_ADMIN=/var/opt/oracle
 {% endif %}
 
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
@@ -136,6 +138,8 @@ if [ -z "$ORACLE_HOME" ] ; then
                 exit;
             fi;
         done < $oratab)
+    [ -n "$ORACLE_HOME" ] && break
+    ORACLE_HOME=$(grep -vE '^[[:blank:]]*#|^[[:blank:]]*$|grid|agent' $oratab | cut -f2 -d: | sort -u)
     [ -n "$ORACLE_HOME" ] && break
     done
 fi

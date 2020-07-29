@@ -114,19 +114,20 @@ esac
 # Hunt down a reasonable ORACLE_HOME
 if [ -z "$ORACLE_HOME" ] ; then
     # Adjust to taste
-    for oratab in /var/opt/oracle/oratab /etc/oratab ; do
-      [ ! -f $oratab ] && continue
-      ORACLE_HOME=$(IFS=:
-          while read -r SID ORACLE_HOME junk;
-          do
-              if [ "$SID" = "$2" ] || [ "$SID" = "*" ] ; then
-                  echo "$ORACLE_HOME";
-                  exit;
-              fi;
-          done < $oratab)
-      [ -n "$ORACLE_HOME" ] && break
-      ORACLE_HOME=$(grep -vE '^[[:blank:]]*#|^[[:blank:]]*$|grid|agent' $oratab | cut -f2 -d: | sort -u)
-      [ -n "$ORACLE_HOME" ] && break
+    for oratab in /var/opt/oracle/oratab /etc/oratab
+    do
+    [ ! -f $oratab ] && continue
+    ORACLE_HOME=$(IFS=:
+        while read -r SID ORACLE_HOME junk;
+        do
+            if [ "$SID" = "$2" ] || [ "$SID" = "*" ] ; then
+                echo "$ORACLE_HOME";
+                exit;
+            fi;
+        done < $oratab)
+    [ -n "$ORACLE_HOME" ] && break
+    ORACLE_HOME=$(grep -vE '^[[:blank:]]*#|^[[:blank:]]*$|grid|agent' $oratab | cut -f2 -d: | sort -u)
+    [ -n "$ORACLE_HOME" ] && break
     done
 fi
 # Last resort
