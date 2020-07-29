@@ -12,11 +12,6 @@
 {% if oracle_client_oracle_home is defined %}
 export ORACLE_HOME="{{ oracle_client_oracle_home }}"
 {% endif %}
-{% if oracle_client_tns_admin is defined %}
-export TNS_ADMIN="{{ oracle_client_tns_admin }}"
-{% else %}
-export TNS_ADMIN=/var/opt/oracle
-{% endif %}
 
 PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 export PATH
@@ -34,6 +29,16 @@ STATE_UNKNOWN=3
 if [ -z "${ORACLE_HOME}" ] && [ -f /etc/profile.d/oracle_client.sh ] ; then
   . /etc/profile.d/oracle-client.sh
 fi
+
+{% if oracle_client_tns_admin is defined %}
+# Define TNS_ADMIN
+export TNS_ADMIN="{{ oracle_client_tns_admin }}"
+{% else %}
+# Force TNS_ADMIN if it is not set
+if [[ -z TNS_ADMIN ]] ; then
+  export TNS_ADMIN=/var/opt/oracle
+fi
+{% endif %}
 
 
 print_usage() {
@@ -145,7 +150,6 @@ if [ -z "$ORACLE_HOME" ] ; then
 fi
 # Last resort
 [ -z "$ORACLE_HOME" ] && [ -d "$PROGPATH"/oracle ] && ORACLE_HOME=$PROGPATH/oracle
-
 if [ "$cmd" != "--db" ]; then
     if [ -z "$ORACLE_HOME" ] || ! [ -d "$ORACLE_HOME" ] ; then
         echo "Cannot determine ORACLE_HOME for sid $2"
