@@ -3,9 +3,9 @@
 # $Date$
 # $Source$
 
-- name: Copy the local Nagios checks on the New Relic server
+- name: Set up local Nagios check {{ check_item }} on the New Relic server
   block:
-    - name: Build the local check on the New Relic server from a template
+    - name: Building local check {{ check_item }} on the New Relic server from a template
       template:
         src: "nagios_plugin_{{ check_item }}.j2"
         dest: "{{ nri_nagios_check_local_path }}/{{ check_item }}"
@@ -13,7 +13,7 @@
         group: "{{ nri_nagios_check_local_group }}"
         mode: "{{ nri_nagios_check_local_mode }}"
   rescue:
-    - name: Copy the local check file to the New Relic server
+    - name: Copying local check {{ check_item }} file to the New Relic server
       copy:
         src: "{{ check_item }}"
         dest: "{{ nri_nagios_check_local_path }}/{{ check_item }}"
