@@ -35,7 +35,7 @@ fi
 export TNS_ADMIN="{{ oracle_client_tns_admin }}"
 {% else %}
 # Force TNS_ADMIN if it is not set
-if [[ -z TNS_ADMIN ]] ; then
+if [[ -z "$TNS_ADMIN" ]] ; then
   export TNS_ADMIN=/var/opt/oracle
 fi
 {% endif %}
@@ -164,7 +164,7 @@ export ORACLE_HOME PATH LD_LIBRARY_PATH
 case "$cmd" in
 --tns)
     tnschk=$(tnsping "$2")
-    tnschk2=$(echo "$tnschk" | grep -c OK)
+    tnschk2=$(echo "$tnschk" | grep -c "^OK (")
     if [ "${tnschk2}" -eq 1 ] ; then 
         tnschk3=${tnschk##*(}; tnschk3=${tnschk3%)*}
         echo "OK - reply time ${tnschk3} from $2|tnsms=${tnschk3}"
