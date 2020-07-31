@@ -32,6 +32,7 @@
   template:
     src: nri-elasticsearch.yml.j2
     dest: "{{ nri_elasticsearch_config_file }}"
+    backup: "{{ nri_elasticsearch_config_backup | default(True) }}"
     mode: 0600
   notify:
     - Restart New Relic Agent
