@@ -232,7 +232,6 @@ case "$cmd" in
         exit "$STATE_OK"
     else
         connectchk3=$(echo "$connectchk" | grep "ORA-" | head -1)
-        echo "CRITICAL - $connectchk3"
         echo "CRITICAL - $connectchk3|connectms=${elapsed}"
         exit "$STATE_CRITICAL"
     fi
