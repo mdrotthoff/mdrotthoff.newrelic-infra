@@ -32,7 +32,8 @@ show_help() {
 
 # Get the lag report for the specified GG process
 get_gg_lag() {
-runuser -p -u oracle ./ggsci <<ScriptEOF
+# runuser -p -u oracle ./ggsci <<ScriptEOF
+runuser -p oracle -c ./ggsci <<ScriptEOF
 lag ${GG_NAME}
 quit
 ScriptEOF
@@ -78,13 +79,13 @@ if [[ -z "${GG_NAME}" ]] ; then
 fi
 
 # Check for the Oracle database in /etc/oratab
-if [[ $(grep "^[[:blank:]]*${ORACLE_DBNAME}:" /etc/oratab -c) -ne 1 ]] ; then
+if [[ $(grep "^[[:blank:]]*${ORACLE_DBNAME}[[:alnum:]]?:" /etc/oratab -cE) -ne 1 ]] ; then
   echo "Oracle database ${ORACLE_DBNAME} not found in /etc/oratab"
   exit ${E_UNKNOWN}
 fi
 
 # Set the Oracle home for the database from /etc/oratab
-ORACLE_HOME=$(grep "^[[:blank:]]*${ORACLE_DBNAME}:" /etc/oratab | cut -f2 -d:)
+ORACLE_HOME=$(grep "^[[:blank:]]*${ORACLE_DBNAME}[[:alnum:]]?:" /etc/oratab -E | cut -f2 -d:)
 export ORACLE_HOME
 if [[ -z "${ORACLE_HOME}" ]] ; then
   echo "Oracle home for database ${ORACLE_DBNAME} not found in /etc/oratab"
