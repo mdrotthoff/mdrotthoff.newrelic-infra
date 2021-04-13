@@ -14,6 +14,9 @@ log_file: "{{ newrelic_infra_config_log_path }}/{{ newrelic_infra_config_log_fil
 {% if newrelic_infra_config_log_to_stdout is defined %}
 log_to_stdout: {{ newrelic_infra_config_log_to_stdout }}
 {% endif %}
+{% if newrelic_infra_config_override_hostname_short is defined %}
+override_hostname_short: {{ ansible_hostname.split(".")[0] | lower }}
+{% endif %}
 
 {% if newrelic_infra_config_net_iface_filter is defined and newrelic_infra_config_net_iface_filter | length > 0 %}
 network_interface_filters:
